@@ -1,0 +1,109 @@
+CREATE DATABASE StudentManagementDB;
+GO
+
+USE StudentManagementDB;
+GO
+
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY,
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Email NVARCHAR(50)
+);
+GO
+
+-- ALTER TABLE TeacherSubject
+-- DROP CONSTRAINT FK__TeacherSu__Teach__3D5E1FD2;
+
+-- ALTER TABLE Schedule
+-- Drop CONSTRAINT FK__Schedule__Teache__47DBAE45;
+
+-- select * from Teachers;
+-- ALTER TABLE Schedule
+-- ADD CONSTRAINT FK__Schedule__Teache
+-- FOREIGN KEY (TeacherID)
+-- REFERENCES Teachers(TeacherID);
+
+Drop Table Teachers;
+
+CREATE TABLE Teachers(
+    TeacherID INT PRIMARY KEY IDENTITY(1,1),
+    FirstName NVARCHAR(50),
+    LastName NVARCHAR(50),
+    Email NVARCHAR(50)
+);
+GO
+Drop Table Subjects;
+CREATE TABLE Subjects (
+    SubjectID INT PRIMARY KEY,
+    SubjectName NVARCHAR(100)
+);
+GO
+
+Drop table TeacherSubject;
+CREATE TABLE TeacherSubject(
+    TeacherID INT,
+    SubjectID INT,
+    FOREIGN KEY (TeacherID) REFERENCES Teachers(TeacherID),
+    FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID),
+    PRIMARY KEY (TeacherID, SubjectID)
+);
+GO;
+
+INSERT INTO Teachers (FirstName, LastName, Email)
+VALUES
+    ('Maria', 'Pietrova', 'maria@example.com'),
+    ('Pavel', 'Durov', 'pavel@example.com');
+
+
+INSERT INTO Subjects (SubjectID, SubjectName)
+VALUES
+    (1, 'Mathematics'),
+    (2, 'Informatics'),
+    (3, 'Literature')
+
+INSERT INTO TeacherSubject (TeacherID, SubjectID)
+VALUES
+    (2, 1),
+    (2, 2),
+    (1, 3);
+select * from Teachers;
+Select * from TeacherSubject
+
+SELECT Teachers.TeacherID, Teachers.FirstName, Teachers.LastName, Teachers.Email, S.SubjectName, Sch.StartTime, Sch.EndTime, Sch.Room, Sch.Weekday
+From Teachers
+JOIN TeacherSubject TS on Teachers.TeacherId = TS.TeacherID
+JOIN Subjects S on TS.SubjectID = S.SubjectID
+JOIN Schedule Sch on S.SubjectID = Sch.SubjectID
+
+
+SELECT T.TeacherID, T.FirstName, T.LastName, T.Email, S.SubjectName, Sch.StartTime, Sch.EndTime, Sch.Room,     Sch.Weekday
+             From Teachers as T
+            JOIN TeacherSubject TS on T.TeacherId = TS.TeacherID
+            JOIN Subjects S on TS.SubjectID = S.SubjectID
+            JOIN Schedule Sch on S.SubjectID = Sch.SubjectID
+
+SELECT SubjectName from Subjects
+
+Drop Table Schedule
+CREATE TABLE Schedule(
+    ScheduleID INT PRIMARY KEY IDENTITY(1,1),
+    SubjectID INT,
+    TeacherID INT,
+    Room NVARCHAR(10),
+    StartTime Time,
+    EndTime Time,
+    Weekday INT -- monday-1, ..., friday -5,
+    FOREIGN KEY (SubjectID) REFERENCES Subjects(SubjectID),
+    FOREIGN KEY (TeacherID) REFERENCES Teachers(TeacherId)
+)
+
+-- insert to pavel durov mathematics to the shedule
+INSERT INTO Schedule (SubjectID, TeacherID, Room, StartTime, EndTime, Weekday)
+VALUES (1, 2, '101', '08:15:00', '10:00:00', 1);
+
+Select T.FirstName, T.LastName, S.SubjectName, Room, StartTime, EndTime, Weekday
+From Schedule
+Join Teachers T on Schedule.TeacherID = T.TeacherId
+Join Subjects S on Schedule.SubjectID = S.SubjectID
+
