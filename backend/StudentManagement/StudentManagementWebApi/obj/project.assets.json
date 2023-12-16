@@ -3711,11 +3711,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/andrew/RiderProjects/StudentManagement/StudentManagementWebApi/StudentManagementWebApi.csproj",
+      "projectUniqueName": "/home/andrew/RiderProjects/StudentManagementFullstack/backend/StudentManagement/StudentManagementWebApi/StudentManagementWebApi.csproj",
       "projectName": "StudentManagementWebApi",
-      "projectPath": "/home/andrew/RiderProjects/StudentManagement/StudentManagementWebApi/StudentManagementWebApi.csproj",
+      "projectPath": "/home/andrew/RiderProjects/StudentManagementFullstack/backend/StudentManagement/StudentManagementWebApi/StudentManagementWebApi.csproj",
       "packagesPath": "/home/andrew/.nuget/packages/",
-      "outputPath": "/home/andrew/RiderProjects/StudentManagement/StudentManagementWebApi/obj/",
+      "outputPath": "/home/andrew/RiderProjects/StudentManagementFullstack/backend/StudentManagement/StudentManagementWebApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/andrew/.nuget/NuGet/NuGet.Config"

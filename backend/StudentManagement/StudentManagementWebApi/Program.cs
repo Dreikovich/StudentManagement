@@ -1,6 +1,7 @@
 
 using Microsoft.OpenApi.Models;
 using StudentManagementWebApi.Attributes;
+using StudentManagementWebApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,17 @@ builder.Services.AddSwaggerGen(c =>
     // Add a custom SchemaFilter to exclude properties marked with SwaggerExcludeAttribute
     c.SchemaFilter<SwaggerExcludeFilter>();
 });
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", build =>
+    {
+        build.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 
 var app = builder.Build();
 
@@ -27,6 +38,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("AllowAll");
 }
 
 app.UseHttpsRedirection();

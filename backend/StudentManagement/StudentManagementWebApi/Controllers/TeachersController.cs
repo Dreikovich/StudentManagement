@@ -84,9 +84,9 @@ public class TeachersController : ControllerBase
             string query = "INSERT INTO Teachers (FirstName, LastName, Email) VALUES (@FirstName, @LastName, @Email)";
             var parameters = new SqlParameter[]
             {
-                new SqlParameter("@FirstName", teacher.FirstName),
-                new SqlParameter("@LastName", teacher.LastName),
-                new SqlParameter("@Email", teacher.Email)
+                new SqlParameter("@FirstName", teacher.TeacherFirstName),
+                new SqlParameter("@LastName", teacher.TeacherLastName),
+                new SqlParameter("@Email", teacher.TeacherEmail)
                 
             };
             _databaseHelper.ExecuteNonQuery(query, parameters);
@@ -113,9 +113,9 @@ public class TeachersController : ControllerBase
             string query = $"UPDATE Teachers SET FirstName = @FirstName, LastName = @LastName, Email = @Email WHERE TeacherId = {id}";
             var parameters = new SqlParameter[]
             {
-                new SqlParameter("@FirstName", teacher.FirstName),
-                new SqlParameter("@LastName", teacher.LastName),
-                new SqlParameter("@Email", teacher.Email)
+                new SqlParameter("@FirstName", teacher.TeacherFirstName),
+                new SqlParameter("@LastName", teacher.TeacherLastName),
+                new SqlParameter("@Email", teacher.TeacherEmail)
             };
             int rowsAffected = _databaseHelper.ExecuteNonQuery(query, parameters);
             if (rowsAffected > 0)

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HUZhfrnburvnCeYfFytX1s5Fn+DfTBRmEx2n57/Q3AFgYU8uWwZUZPsijiU9cFut/sNEsaSxWMhct2D7UXiIxQ==",
+  "dgSpecHash": "nyZpbygeg7D745CARZuJnJEgo5QM/QxPjMuPHV2V5ypwV/fE18U22TCVK+723U9U+w9U1qS22gjjAu6zhvyNAg==",
   "success": true,
-  "projectFilePath": "/home/andrew/RiderProjects/StudentManagement/StudentManagementWebApi/StudentManagementWebApi.csproj",
+  "projectFilePath": "/home/andrew/RiderProjects/StudentManagementFullstack/backend/StudentManagement/StudentManagementWebApi/StudentManagementWebApi.csproj",
   "expectedPackageFiles": [
     "/home/andrew/.nuget/packages/azure.core/1.25.0/azure.core.1.25.0.nupkg.sha512",
     "/home/andrew/.nuget/packages/azure.identity/1.7.0/azure.identity.1.7.0.nupkg.sha512",
