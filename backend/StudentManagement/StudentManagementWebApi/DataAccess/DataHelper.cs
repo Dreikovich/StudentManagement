@@ -31,21 +31,18 @@ public class DataHelper
             foreach (DataColumn column in dataTable.Columns)
             {
                 var property = typeof(T).GetProperty(column.ColumnName);
-
-                if (property != null && row[column] != DBNull.Value)
-                {
-                    property.SetValue(item, row[column], null);
-                }
-                else if (property == null && row[column] != DBNull.Value)
+                if (property == null && row[column] != DBNull.Value)
                 {
                     isDataExist |= UpdateSubModel(subModelList, item, row[column], column.ColumnName);
                 }
+                else if (property != null && row[column] != DBNull.Value)
+                {
+                    property.SetValue(item, row[column], null);
+                }
             }
-
-            if (isDataExist)
-            {
-                list.Add(item);
-            }
+            
+            list.Add(item);
+            
         }
 
         return list;
@@ -63,9 +60,11 @@ public class DataHelper
     private bool UpdateSubModel(List<object> subModelList, object item, object columnValue, string columnName)
     {
         bool isDataExist = false;
+        
 
         foreach (var subModel in subModelList)
         {
+            
             var subModelProperty = subModel.GetType().GetProperty(columnName);
             if (subModelProperty != null && subModelProperty.PropertyType == columnValue.GetType())
             {

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using StudentManagementWebApi.Dtos;
 using StudentManagementWebApi.Repositories;
 
 namespace StudentManagementWebApi.Controllers;
@@ -22,6 +23,20 @@ public class AttendanceController : ControllerBase
             var attendances = _attendanceRepository.GetAllAttendances(group_name, academic_year);
             
             return Ok(attendances);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        }
+    }
+    
+    [HttpPost]
+    public IActionResult AddAttendance([FromBody] AttendanceCreationDto attendanceDto)
+    {
+        try
+        {
+            _attendanceRepository.AddAttendance(attendanceDto);
+            return Ok();
         }
         catch (Exception ex)
         {

@@ -6,6 +6,7 @@ namespace StudentManagementWebApi.Dtos;
 public class StudentDto
 {   
     [SwaggerExclude]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int StudentID { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }

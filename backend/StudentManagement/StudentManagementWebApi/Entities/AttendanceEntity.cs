@@ -29,5 +29,11 @@ public class AttendanceEntity
 
     public Teacher Teacher{ get; set; }
     
+    public int StudentID { get; set; }
+    
+    public int TeacherID { get; set; }
+    
+    public int TypeID { get; set; }
+    
     
 }

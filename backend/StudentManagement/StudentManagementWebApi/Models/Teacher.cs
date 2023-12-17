@@ -8,6 +8,7 @@ namespace StudentManagementWebApi.Models;
 public class Teacher
 {
     [SwaggerExclude]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public int TeacherID { get; set; }
     public string TeacherFirstName { get; set; }
     public string TeacherLastName { get; set; }
