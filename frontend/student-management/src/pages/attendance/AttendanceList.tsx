@@ -7,7 +7,7 @@ const AttendanceList: React.FC =()=>{
     const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
-        attendanceService.getAttendance("IPAUT-171", "2023/2024")
+        attendanceService.getAttendance("IPAUT-171", "2023/2024", "Introduction to Computer Science","Lab")
             .then((attendance)=>setAttendanceData(attendance))
             .finally(()=>setLoading(false))
 

@@ -22,7 +22,7 @@ public class AttendanceRepository : IAttendanceRepository
 
     }
 
-    public List<AttendanceDto> GetAllAttendances(string groupName, string academicYear)
+    public List<AttendanceDto> GetAllAttendances(string groupName, string academicYear, string subjectName, string sessionType)
     {
         string query = "SELECT * " +
                        "FROM Attendance AS A " +
@@ -31,7 +31,7 @@ public class AttendanceRepository : IAttendanceRepository
                        "JOIN Students STU ON A.StudentID = STU.StudentID " +
                        "JOIN Teachers T ON A.TeacherID = T.TeacherID " +
                        "JOIN SubjectTypes ST2 on A.TypeID = ST2.TypeID "+
-                       "WHERE SG.GroupName = '" + groupName + "' AND SG.AcademicYear = '" + academicYear + "'";
+                       "WHERE SG.GroupName = '" + groupName + "' AND SG.AcademicYear = '" + academicYear + "' AND S.SubjectName = '" + subjectName + "' AND ST2.TypeName = '" + sessionType + "'";
         var attendancesDataTable = _databaseHelper.ExecuteQuery(query);
         var attendanceEntities = _dataHelper.DataTableToList<AttendanceEntity>(attendancesDataTable);
         var attendanceDto = new List<AttendanceDto>();

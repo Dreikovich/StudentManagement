@@ -16,11 +16,11 @@ public class AttendanceController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetAllAttendances([FromQuery] string group_name, [FromQuery] string academic_year)
+    public IActionResult GetAllAttendances([FromQuery] string group_name, [FromQuery] string academic_year, string subject_name, string session_type)
     {
         try
         {
-            var attendances = _attendanceRepository.GetAllAttendances(group_name, academic_year);
+            var attendances = _attendanceRepository.GetAllAttendances(group_name, academic_year, subject_name, session_type);
             
             return Ok(attendances);
         }

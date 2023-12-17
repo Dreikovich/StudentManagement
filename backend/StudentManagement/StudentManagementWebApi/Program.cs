@@ -30,6 +30,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IStudentGroupsRepository, StudentGroupsRepository>();
 
 var app = builder.Build();
 
