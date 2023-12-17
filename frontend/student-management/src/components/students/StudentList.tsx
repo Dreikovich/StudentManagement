@@ -6,6 +6,7 @@ const StudentList: React.FC = () =>{
     const [students, setStudents] = React.useState<Student[]>([]);
     React.useEffect(() => {
         studentService.getStudents().then((students) => setStudents(students));
+        console.log(students)
     }, []);
     return (
         <div>
@@ -23,13 +24,16 @@ const StudentList: React.FC = () =>{
                     </tr>
                     </thead>
                     <tbody>
-                    {students.map((student) => (
-                        <tr key={student.id} className="hover:bg-gray-100">
-                            <td className="py-4 px-4 border-b">{student.id}</td>
+                    {students && students.map((student) => (
+
+                        <tr key={student.firstName} className="hover:bg-gray-100">
+
+                            <td className="py-4 px-4 border-b">{student.studentID ?? 'N/A'}</td>
                             <td className="py-4 px-4 border-b">{student.firstName}</td>
                             {/*<td className="py-4 px-4 border-b">{student.isActive?"active":"not active"}</td>*/}
                             <td className="py-4 px-4 border-b">{student.lastName}</td>
                             <td className="py-4 px-4 border-b">{student.groupName}</td>
+
                         </tr>
                     ))}
                     </tbody>

@@ -1,6 +1,6 @@
 // @ts-ignore
 interface Student {
-    id: number;
+    studentID: number;
     firstName: string;
     lastName: string;
     groupName: string;
