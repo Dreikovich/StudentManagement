@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementWebApi.Dtos;
-using StudentManagementWebApi.Mappers;
 using StudentManagementWebApi.Repositories;
 
 namespace StudentManagementWebApi.Controllers;
