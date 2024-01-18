@@ -32,6 +32,7 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IStudentGroupsRepository, StudentGroupsRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
+builder.Services.AddScoped<IStudentGroupAssignmentRepository, StudentGroupAssignmentRepository>();
 
 var app = builder.Build();
 

@@ -1,38 +1,20 @@
-// @ts-ignore
-interface Student {
-    studentID?: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    groupName?: string;
+interface StudentGroupAssignment{
+    StudentID: number,
+    StudentGroupID: number
 }
 
-export type {Student};
+export type {StudentGroupAssignment}
 
-const API_URL = 'https://localhost:7075/api/Students';
+const API_URL = 'https://localhost:7075/api/StudentGroupAssignment';
 
-const getStudents = async (): Promise<Student[]> => {
-    try{
-        const response = await fetch(API_URL);
-        if(!response.ok){
-            throw new Error('Something went wrong');
-        }
-        return await response.json();
-    }
-    catch (e){
-        console.log(e);
-        throw e;
-    }
-}
-
-const postStudent = async (student: Student): Promise<Student | void> => {
+const addStudentGroupAssignment = async (studentGroupAssignment:StudentGroupAssignment ):Promise<StudentGroupAssignment|void> =>{
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(student)
+            body: JSON.stringify(studentGroupAssignment)
         });
 
         if (!response.ok) {
@@ -55,5 +37,7 @@ const postStudent = async (student: Student): Promise<Student | void> => {
     }
 }
 
-const studentService = {getStudents, postStudent}
-export default studentService;
+const studentGroupAssignmentService = {addStudentGroupAssignment}
+export default studentGroupAssignmentService;
+
+

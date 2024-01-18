@@ -12,7 +12,9 @@ const Navbar: React.FC = () => {
                     <Link to="/students" className="text-white hover:text-gray-300">
                         Students
                     </Link>
-                    <a href="#" className="text-white hover:text-gray-300">Enrollments</a>
+                    <Link to='/Deans-Office' className="text-white hover:text-gray-300">
+                        Dean's Office
+                    </Link>
                 </div>
             </div>
         </nav>
