@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using StudentManagementWebApi.Dtos;
 using StudentManagementWebApi.Repositories;
 
 namespace StudentManagementWebApi.Controllers;
@@ -9,7 +10,7 @@ public class SubjectController: ControllerBase
 {   
     private readonly ISubjectRepository _subjectRepository;
     
-public SubjectController(ISubjectRepository subjectRepository)
+    public SubjectController(ISubjectRepository subjectRepository)
     {
         _subjectRepository = subjectRepository;
     }
@@ -25,6 +26,23 @@ public SubjectController(ISubjectRepository subjectRepository)
         catch (Exception ex)
         {
             return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        }
+    }
+
+    [HttpPost]
+    
+    public IActionResult PostSubject(SubjectCreationDto subjectCreationDto)
+    {
+        try
+        {
+            _subjectRepository.CreateSubject(subjectCreationDto);
+            return Ok();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 }

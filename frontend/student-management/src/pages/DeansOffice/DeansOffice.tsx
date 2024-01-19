@@ -1,29 +1,23 @@
-import React from 'react';
-import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
+import Sidebar from "../../components/sidebar/SideBar";
+import { faUser, faUsers, faBook, faChalkboardTeacher} from '@fortawesome/free-solid-svg-icons';
+import {faBookReader} from "@fortawesome/free-solid-svg-icons/faBookReader";
 
-import AddStudentForm from "../Forms/AddStudentForm/AddStudentForm";
-import {AssignGroups} from "../Forms/AssignGroups/AssignGroups";
-// Import other components and services you need
+const navigationItems = [
+    { text: 'Students', link: '/deans-office/students', icon: faUser },
+    { text: 'Assign Groups', link: '/deans-office/assign-groups', icon: faUsers },
+    { text: 'Add Subject', link: '/deans-office/add-subject', icon: faBook },
+    { text: 'Subject Teacher Assignment', link: '/deans-office/subject-group-assignment', icon: faChalkboardTeacher },
+    { text:' Subject Student Assignment', link:'/deans-office/subject-student-assignment', icon: faBookReader}
 
-const DeansOffice = () => {
+];
+
+function DeansOffice() {
     return (
+        <div className="flex">
+            <Sidebar items={navigationItems} />
 
-            <div className="flex">
-                <div className="w-64 h-screen bg-gray-800 text-white p-5">
-                    <h1 className="text-xl mb-6">Dean's Office</h1>
-                    <nav>
-                        <ul>
-                            <li><Link to="/deans-office/students">Students</Link></li>
-                            <li><Link to="/deans-office/assign-groups">Assign Groups</Link></li>
-                            <li><Link to="/deans-office/add-subject">Add Subject</Link></li>
-
-                        </ul>
-                    </nav>
-                </div>
-
-            </div>
-        
+        </div>
     );
-};
+}
 
 export default DeansOffice;

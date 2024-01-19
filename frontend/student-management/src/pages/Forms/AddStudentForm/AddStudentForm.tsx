@@ -7,7 +7,6 @@ const AddStudentForm: React.FC = () => {
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
 
-    // Handle form submission
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         studentService.postStudent({ firstName, lastName, email })

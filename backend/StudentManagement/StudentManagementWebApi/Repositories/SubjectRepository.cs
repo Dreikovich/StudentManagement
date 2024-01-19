@@ -32,7 +32,7 @@ public class SubjectRepository : ISubjectRepository
             {
                 SubjectID = subject.SubjectID,
                 SubjectName = subject.SubjectName,
-                SessionType = group.Select(s => new TypeDto
+                SubjectComponents = group.Select(s => new TypeDto
                 {
                     TypeID = s.TypeID,
                     TypeName = s.TypeName,
@@ -49,5 +49,47 @@ public class SubjectRepository : ISubjectRepository
             };
         }).ToList();
         return result;
+    }
+    
+    private int FindSubjectId(string subjectName)
+    {
+        
+        string query = $"SELECT SubjectID FROM Subjects WHERE SubjectName = '{subjectName}'";
+    
+        var subjectDataTable = _databaseHelper.ExecuteQuery(query);
+    
+        var subjectEntity = _dataHelper.DataTableToList<SubjectEntity>(subjectDataTable);
+    
+        if (subjectEntity.Any())
+        {
+            return subjectEntity.First().SubjectID;
+        }
+    
+        // Handle the case where the subject is not found
+        throw new Exception("Subject not found.");
+    }
+
+    
+    
+    public void CreateSubject(SubjectCreationDto subjectCreationDto)
+    {
+        var subjectComponents = subjectCreationDto.SubjectComponents;
+        var subjectName = subjectCreationDto.SubjectName;
+        
+        
+        string query = string.Format("insert into Subjects (SubjectName) values ('{0}')", subjectName);
+        _databaseHelper.ExecuteNonQuery(query);
+        var subjectId = FindSubjectId(subjectName);
+        foreach (var subjectComponent in subjectComponents)
+        {
+            var typeId = subjectComponent.TypeID;
+            var hours = subjectComponent.Hours;
+            var teacherId = subjectComponent.TeacherID;
+            string query2 = String.Format("insert into SubjectComponents (SubjectID, TypeID, Hours, TeacherID) values ({0}, {1}, {2}, {3})", subjectId, typeId, hours, teacherId);
+            _databaseHelper.ExecuteNonQuery(query2);
+        }
+
+        
+
     }
 }

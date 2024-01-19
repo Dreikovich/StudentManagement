@@ -36,7 +36,7 @@ public class DatabaseHelper
     }
     
     public int ExecuteNonQuery(string query)
-    {
+        {
         SqlConnection connection = new SqlConnection(_connectionString);
         connection.Open();
         SqlCommand command = new SqlCommand(query, connection);

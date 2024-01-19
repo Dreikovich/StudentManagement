@@ -47,7 +47,7 @@ public class AttendanceRepository : IAttendanceRepository
         try
         {
             var attendanceEntity = _attendanceMapper.MapAttendanceDtoToAttendanceEntity(attendanceDto);
-           string query = "INSERT INTO Attendance (StudentID, TeacherID, TypeID, Date, Time, Status, Comments, Auditorium, SubjectID, GroupID) " +
+            string query = "INSERT INTO Attendance (StudentID, TeacherID, TypeID, Date, Time, Status, Comments, Auditorium, SubjectID, GroupID) " +
                           "VALUES (" + attendanceEntity.StudentID + ", " + attendanceEntity.TeacherID + ", " + attendanceEntity.TypeID + ", '" + attendanceEntity.Date + "', '" + attendanceEntity.Time + "', '" + attendanceEntity.Status + "', '" + attendanceEntity.Comments + "', '" + attendanceEntity.Auditorium + "', " + attendanceEntity.SubjectID + ", " + attendanceEntity.GroupID + ")";
             _databaseHelper.ExecuteNonQuery(query);
         }
