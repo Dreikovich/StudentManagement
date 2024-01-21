@@ -26,4 +26,16 @@ interface Attendance {
     };
 }
 
-export type {Attendance};
+interface AttendanceRecord {
+    subjectID: number;
+    groupID: number;
+    typeID: number;
+    studentID: number;
+    teacherID: number;
+    date: string; // or Date ???
+    status: string;
+    comments: string;
+    auditorium: string;
+}
+
+export type {Attendance, AttendanceRecord};

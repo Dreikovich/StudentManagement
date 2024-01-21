@@ -1,4 +1,4 @@
-import {Attendance} from "../interfaces/Attendance/Attendance";
+import {Attendance, AttendanceRecord} from "../interfaces/Attendance/Attendance";
 
 const API_BASE_URL = 'https://localhost:7075/api/Attendance';
 const getAttendance = async (groupName:string, academicYear:string, subjectName: string, sessionTypeName: string):Promise<Attendance[]> => {
@@ -20,5 +20,22 @@ const getAttendance = async (groupName:string, academicYear:string, subjectName:
         throw e;
     }
 };
-const attendanceService = { getAttendance };
+
+const postAttendance = async (attendance: AttendanceRecord): Promise<AttendanceRecord | void> => {
+    try {
+        const response = await fetch(API_BASE_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(attendance)
+        });
+    }
+    catch (error) {
+        console.error('Posting attendance failed:', error);
+        throw error;
+    }
+}
+
+const attendanceService = { getAttendance, postAttendance };
 export default attendanceService;

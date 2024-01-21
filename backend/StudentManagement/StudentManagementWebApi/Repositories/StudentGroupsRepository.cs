@@ -21,8 +21,8 @@ public class StudentGroupsRepository : IStudentGroupsRepository
     public List<StudentGroupsDto> GetAllStudentGroups()
     {
         string query = "select * from studentGroups " +
-                       "JOIN StudentGroupAssignment SGA on studentGroups.StudentGroupID = SGA.StudentGroupID " +
-                       "JOIN Students S on S.StudentID = SGA.StudentID";
+                       "Left JOIN StudentGroupAssignment SGA on studentGroups.StudentGroupID = SGA.StudentGroupID " +
+                       "left JOIN Students S on S.StudentID = SGA.StudentID";
         var studentGroupsDataTable = _databaseHelper.ExecuteQuery(query);
         var studentGroupsEntities = _dataHelper.DataTableToList<StudentGroupsEntity>(studentGroupsDataTable);
         return _studentGroupMapper.MapStudentGroupsEntityToStudentGroupDto(studentGroupsEntities);

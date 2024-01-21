@@ -34,6 +34,7 @@ builder.Services.AddScoped<IStudentGroupsRepository, StudentGroupsRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<IStudentGroupAssignmentRepository, StudentGroupAssignmentRepository>();
 builder.Services.AddScoped<ISubjectTypesRepository, SubjectTypesRepository>();
+builder.Services.AddScoped<ISubjectGroupAssignmentRepository, SubjectGroupAssignmentRepository>();
 
 var app = builder.Build();
 

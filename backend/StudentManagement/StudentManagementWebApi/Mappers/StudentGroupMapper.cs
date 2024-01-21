@@ -17,14 +17,16 @@ public class StudentGroupMapper : IStudentGroupMapper
                 StudentGroupID = firstGroup.StudentGroupID,
                 GroupName = firstGroup.GroupName,
                 AcademicYear = firstGroup.AcademicYear,
-                Students = group.Select(s => new StudentDto
-                {
-                    StudentID = s.StudentEntity.StudentID,
-                    FirstName = s.StudentEntity.FirstName,
-                    LastName = s.StudentEntity.LastName,
-                    Email = s.StudentEntity.Email,
-    
-                }).ToList()
+                Students = group
+                    .Where(s => s.StudentEntity!= null) 
+                    .Select(s => new StudentDto
+                    {
+                        StudentID = s.StudentEntity.StudentID,
+                        FirstName = s.StudentEntity.FirstName,
+                        LastName = s.StudentEntity.LastName,
+                        Email = s.StudentEntity.Email,
+                    })
+                    .ToList()
             };
         }).ToList();
         return result;
