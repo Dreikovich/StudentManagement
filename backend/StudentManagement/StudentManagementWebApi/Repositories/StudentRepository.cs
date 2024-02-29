@@ -22,7 +22,7 @@ public class StudentRepository : IStudentRepository
     {
         try
         {
-            string query = "Select S.StudentID, S.FirstName, S.LastName, S.Email, SG.GroupName from students as S" +
+            string query = "Select S.StudentID, S.FirstName, S.LastName, S.Email, S.Gender, S.Status, SG.GroupName from students as S" +
                            " Left Join StudentGroupAssignment SGA on S.StudentID = SGA.StudentID" +
                            " Left Join StudentGroups SG on SGA.StudentGroupID = SG.StudentGroupID";
             var studentsDataTable = _databaseHelper.ExecuteQuery(query);
@@ -47,7 +47,12 @@ public class StudentRepository : IStudentRepository
         try
         {
             var studentEntity = _studentMapper.MapStudentDtoToStudentEntity(studentDto);
-            string query = $"INSERT INTO Students (FirstName, LastName, Email) VALUES ('{studentEntity.FirstName}', '{studentEntity.LastName}', '{studentEntity.Email}')";
+            string query = $"INSERT INTO Students (FirstName, LastName, Email, Gender, Status) VALUES " +
+                           $"('{studentEntity.FirstName}', " +
+                           $"'{studentEntity.LastName}', " +
+                           $"'{studentEntity.Email}'), " +
+                           $"'{studentEntity.Gender}'), " +
+                           $"'{studentEntity.Status}')";
             _databaseHelper.ExecuteNonQuery(query);
         }
         catch (Exception e)

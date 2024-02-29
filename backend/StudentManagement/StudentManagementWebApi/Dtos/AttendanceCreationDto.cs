@@ -10,7 +10,7 @@ public class AttendanceCreationDto
     public int TeacherID { get; set; }
     public DateTime Date { get; set; }
     public string Status { get; set; }
-    public string Comments { get; set; }
+    public string? Comments { get; set; }
     public string Auditorium { get; set; }
     
 }

@@ -13,7 +13,9 @@ public class StudentMapper: IStudentMapper
                 FirstName = student.FirstName,
                 LastName = student.LastName,
                 Email = student.Email,
-                GroupName = student.GroupName
+                GroupName = student.GroupName,
+                Gender = student.Gender,
+                Status = student.Status
             };
     }
     
@@ -25,6 +27,8 @@ public class StudentMapper: IStudentMapper
             FirstName = studentDto.FirstName,
             LastName = studentDto.LastName,
             Email = studentDto.Email,
+            Gender = studentDto.Gender,
+            Status = studentDto.Status
         };
     }
 }

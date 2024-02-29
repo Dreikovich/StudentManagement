@@ -52,5 +52,10 @@ public class DatabaseHelper
         return command.ExecuteScalar();
     }
     
+    public SqlConnection GetConnection()
+    {
+        return new SqlConnection(_connectionString);
+    }
+    
     
 }

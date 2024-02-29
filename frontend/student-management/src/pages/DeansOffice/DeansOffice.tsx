@@ -2,6 +2,7 @@ import Sidebar from "../../components/sidebar/SideBar";
 import { faUser, faUsers, faBook, faChalkboardTeacher} from '@fortawesome/free-solid-svg-icons';
 import {faBookReader} from "@fortawesome/free-solid-svg-icons/faBookReader";
 import {faUserCheck} from "@fortawesome/free-solid-svg-icons/faUserCheck";
+import {faEdit} from "@fortawesome/free-solid-svg-icons/faEdit";
 
 const navigationItems = [
     { text: 'Students', link: '/deans-office/students', icon: faUser },
@@ -10,6 +11,7 @@ const navigationItems = [
     { text: 'Subject Teacher Assignment', link: '/deans-office/subject-group-assignment', icon: faChalkboardTeacher },
     { text:' Subject Student Assignment', link:'/deans-office/subject-student-assignment', icon: faBookReader},
     { text: 'Attendance', link: '/deans-office/attendance', icon: faUserCheck },
+    { text: 'Grades', link: '/deans-office/grades', icon: faEdit },
 
 
 ];

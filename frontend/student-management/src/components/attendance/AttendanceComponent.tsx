@@ -10,7 +10,6 @@ import {toast} from "react-toastify";
 
 
 const AttendanceComponent = () => {
-    const [students, setStudents] = useState<Student[]>([]);
     const [subjects, setSubjects] = useState<Subject[]>([]);
     const [assignedSubjects, setAssignedSubjects] = useState<Subject[]>([]);
     const [groups, setGroups] = useState<Group[]>([]);
@@ -39,14 +38,6 @@ const AttendanceComponent = () => {
         }
         return "";
     };
-    const fetchStudents = async () => {
-        try {
-            const data = await SubjectService.fetchSubjects();
-            setSubjects(data);
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
 
     const fetchSubjects = async () => {

@@ -6,16 +6,18 @@ const AddStudentForm: React.FC = () => {
     const [firstName, setFirstName] = useState<string>('');
     const [lastName, setLastName] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [gender, setGender] = useState<string>('');
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        studentService.postStudent({ firstName, lastName, email })
+        studentService.postStudent({ firstName, lastName, email, gender })
             .then(() => {
                 toast.success("Student created successfully!");
                 // Reset the form fields
                 setFirstName('');
                 setLastName('');
                 setEmail('');
+                setGender('')
             })
             .catch(() => {
                 toast.error("Failed to create student.");
@@ -61,6 +63,19 @@ const AddStudentForm: React.FC = () => {
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        required
+                    />
+                </div>
+                <div className="mb-6">
+                    <label htmlFor="gender" className="block text-gray-700 text-sm font-semibold mb-2">
+                        Gender
+                    </label>
+                    <input
+                        type="text"
+                        id="gender"
+                        value={gender}
+                        onChange={(e) => setGender(e.target.value)}
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required
                     />
