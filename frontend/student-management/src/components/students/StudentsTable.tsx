@@ -2,11 +2,11 @@ import React from 'react'
 import studentService, {Student} from "../../services/StudentService";
 import {faEdit, faEye, faTrashAlt} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-interface StudentProps {
-    students: Student[]
-}
-const StudentsTable: React.FC<StudentProps> = ({students}) =>{
+import {useSelector} from "react-redux";
+import {RootState} from "../../store/store";
 
+const StudentsTable: React.FC = () =>{
+    const students = useSelector((state: RootState) => state.students.students);
     return(
         <div className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
             <table className="min-w-full leading-normal">

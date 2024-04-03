@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Navbar from "./components/navbar/Navbar";
 import Students from "./pages/students/Students";
@@ -16,9 +17,11 @@ import GradesComponent from "./components/grades/GradesComponent";
 import StudentManagement from "./components/students/StudentManagement";
 
 
+
 function App() {
   return (
       <BrowserRouter>
+
           <div className="bg-gray-200 min-h-screen flex flex-col">
               <Navbar/>
               <ToastContainer/>
@@ -26,9 +29,8 @@ function App() {
                   <Routes>
                       <Route path="/students" element={<StudentManagement />} />
                       <Route path="/attendance" element={<AttendanceList />} />
-                      <Route path="/" element={<AddStudentForm />} />
+                      <Route path="/" element={<StudentManagement />} />
                       <Route path="/deans-office" element={<DeansOffice />} />
-                      <Route path="/deans-office/students" element={<AddStudentForm />} />
                       <Route path="/deans-office/assign-groups" element={<AssignGroups />} />
                       <Route path="/deans-office/subject-group-assignment" element={<SubjectsComponent/>} />
                       <Route path="/deans-office/subject-student-assignment" element={<AssignGroupToSubject/>} />
@@ -38,7 +40,6 @@ function App() {
 
               </div>
           </div>
-
       </BrowserRouter>
 
   );

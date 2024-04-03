@@ -6,6 +6,7 @@ interface Student {
     email: string;
     gender: string;
     groupName?: string;
+    status:string;
 }
 
 export type {Student};
@@ -48,7 +49,7 @@ const postStudent = async (student: Student): Promise<Student | void> => {
         } else {
             // Handle the case where there's no content
             console.log('POST successful, no content returned');
-            return;
+            return student;
         }
     } catch (e) {
         console.error('Error posting student:', e);
