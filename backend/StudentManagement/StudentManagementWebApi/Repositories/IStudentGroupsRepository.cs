@@ -7,4 +7,6 @@ public interface IStudentGroupsRepository
     public List<StudentGroupsDto> GetAllStudentGroups();
     
     
+    
+    
 }

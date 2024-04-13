@@ -16,11 +16,11 @@ public class StudentsController : ControllerBase
     }
     
     [HttpGet]
-    public IActionResult GetAllStudents()
+    public IActionResult GetAllStudents([FromQuery] string search = null, [FromQuery] List<string> filters = null)
     {
         try
         {
-            var students = _studentRepository.GetAllStudents();
+            var students = _studentRepository.GetAllStudents(search, filters);
             return Ok(students);
         }
         catch (Exception ex)
@@ -35,6 +35,21 @@ public class StudentsController : ControllerBase
         try
         {
             _studentRepository.AddStudent(studentDto);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal Server Error: {ex.Message}");
+        }
+    }
+    
+    [HttpDelete]
+    [Route("{studentId}")]
+    public IActionResult DeleteStudent(int studentId)
+    {
+        try
+        {
+            // _studentRepository.DeleteStudent(studentId);
             return Ok();
         }
         catch (Exception ex)

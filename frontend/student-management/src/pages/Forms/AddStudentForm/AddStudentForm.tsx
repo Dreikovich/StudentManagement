@@ -3,6 +3,7 @@ import studentService from "../../../services/StudentService";
 import {toast} from "react-toastify";
 import {useDispatch} from "react-redux";
 import {addStudent} from "../../../features/students/StudentSlice";
+import {v4 as uuidv4} from 'uuid';
 interface ModalProps {
     isOpen: boolean;
     closeModal: ()=>void;
@@ -19,8 +20,8 @@ const AddStudentForm: React.FC<ModalProps > = ({isOpen, closeModal}) => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
-
-        const studentData = { firstName, lastName, email, gender, status };
+        const studentUuid = uuidv4();
+        const studentData = { firstName, lastName, email, gender, status, studentUuid };
 
         studentService.postStudent(studentData )
             .then((newStudent) => {

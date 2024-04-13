@@ -14,4 +14,6 @@ public class StudentEntity
     public string Gender { get; set; }
     public string Status { get; set;}
     
+    public Guid StudentUuid { get; set; }
+    
 }

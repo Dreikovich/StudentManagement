@@ -7,6 +7,7 @@ interface Student {
     gender: string;
     groupName?: string;
     status:string;
+    studentUuid:string;
 }
 
 export type {Student};

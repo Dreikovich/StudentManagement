@@ -10,7 +10,7 @@ builder.Configuration.AddJsonFile("appsettings.json");
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -28,6 +28,9 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+//for the purpose of this project, we are disabling the implicit required attribute for non-nullable reference types
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 builder.Services.AddScoped<IStudentGroupsRepository, StudentGroupsRepository>();

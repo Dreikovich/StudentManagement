@@ -13,6 +13,8 @@ public class StudentDto
     public string Email { get; set; }
     public string Gender { get; set; }
     public string Status { get; set; }
+    
+    public string StudentUuid { get; set; }
     [SwaggerExclude]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? GroupName { get; set; }

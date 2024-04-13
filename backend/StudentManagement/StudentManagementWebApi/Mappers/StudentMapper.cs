@@ -15,7 +15,8 @@ public class StudentMapper: IStudentMapper
                 Email = student.Email,
                 GroupName = student.GroupName,
                 Gender = student.Gender,
-                Status = student.Status
+                Status = student.Status,
+                StudentUuid = student.StudentUuid.ToString()
             };
     }
     
@@ -28,7 +29,8 @@ public class StudentMapper: IStudentMapper
             LastName = studentDto.LastName,
             Email = studentDto.Email,
             Gender = studentDto.Gender,
-            Status = studentDto.Status
+            Status = studentDto.Status,
+            StudentUuid = Guid.Parse(studentDto.StudentUuid)
         };
     }
 }

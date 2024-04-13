@@ -18,13 +18,17 @@ public class StudentRepository : IStudentRepository
         _studentMapper = new StudentMapper();
     }
     
-    public List<StudentDto> GetAllStudents()
+    public List<StudentDto> GetAllStudents(string search, List<string> filters)
     {
         try
         {
-            string query = "Select S.StudentID, S.FirstName, S.LastName, S.Email, S.Gender, S.Status, SG.GroupName from students as S" +
+            string query = "Select S.StudentID, S.FirstName, S.LastName, S.Email, S.Gender, S.Status, SG.GroupName, S.StudentUuid from students as S" +
                            " Left Join StudentGroupAssignment SGA on S.StudentID = SGA.StudentID" +
                            " Left Join StudentGroups SG on SGA.StudentGroupID = SG.StudentGroupID";
+            if (!string.IsNullOrEmpty(search))
+            {
+                query += $" WHERE S.FirstName LIKE '%{search}%' OR S.LastName LIKE '%{search}%'";
+            }
             var studentsDataTable = _databaseHelper.ExecuteQuery(query);
             var studentEntities = _dataHelper.DataTableToList<StudentEntity>(studentsDataTable);
             var studentDtos = new List<StudentDto>();
@@ -47,12 +51,14 @@ public class StudentRepository : IStudentRepository
         try
         {
             var studentEntity = _studentMapper.MapStudentDtoToStudentEntity(studentDto);
-            string query = $"INSERT INTO Students (FirstName, LastName, Email, Gender, Status) VALUES " +
+            string query = $"INSERT INTO Students (FirstName, LastName, Email, Gender, Status, StudentUuid) VALUES " +
                            $"('{studentEntity.FirstName}', " +
                            $"'{studentEntity.LastName}', " +
-                           $"'{studentEntity.Email}'), " +
-                           $"'{studentEntity.Gender}'), " +
-                           $"'{studentEntity.Status}')";
+                           $"'{studentEntity.Email}', " +
+                           $"'{studentEntity.Gender}', " +
+                           $"'{studentEntity.Status}', " +
+                           $"'{studentEntity.StudentUuid}')";
+                           
             _databaseHelper.ExecuteNonQuery(query);
         }
         catch (Exception e)

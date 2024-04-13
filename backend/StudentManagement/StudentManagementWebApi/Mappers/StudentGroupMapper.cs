@@ -26,7 +26,8 @@ public class StudentGroupMapper : IStudentGroupMapper
                         LastName = s.StudentEntity.LastName,
                         Email = s.StudentEntity.Email,
                         Gender = s.StudentEntity.Gender,
-                        Status = s.StudentEntity.Status
+                        Status = s.StudentEntity.Status,
+                        StudentUuid = s.StudentEntity.StudentUuid.ToString()
                     })
                     .ToList()
             };

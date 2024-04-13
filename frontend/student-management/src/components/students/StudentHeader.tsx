@@ -5,6 +5,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import {useSelector} from "react-redux";
 import {RootState} from "../../store/store";
 import AddStudentForm from "../../pages/Forms/AddStudentForm/AddStudentForm";
+import GenericFilter from "../filters/GenericFilter";
 
 
 const StudentHeader: React.FC = () => {
@@ -28,11 +29,13 @@ const StudentHeader: React.FC = () => {
                     <button className="text-gray-500 focus:outline-none">
                         <FontAwesomeIcon icon={faSearch}/>
                     </button>
+                    <GenericFilter/>
                 </div>
                 <button onClick={() => setIsModalOpen(true)}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
                     Add Student
                 </button>
+
             </div>
             <AddStudentForm isOpen = {isModalOpen} closeModal={closeModal}/>
         </div>
