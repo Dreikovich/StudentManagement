@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import ModalComponent from "../../../components/modal/ModalComponent";
+import ModalComponent from "../../modal/ModalComponent";
 import {SubjectService, SubjectData, Subject} from "../../../services/SubjectService";
 import groupService, {Group} from "../../../services/GroupServices";
 import {SubjectGroupAssignment, subjectGroupAssignmentService} from "../../../services/SubjectGroupAssignmentService";

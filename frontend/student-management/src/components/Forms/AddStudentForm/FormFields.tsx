@@ -22,7 +22,7 @@ const FormField: React.FC<FormFieldProps> = ({
                                                  options,
                                                  required = false,
                                              }) => {
-    const [passwordVisible, setPasswordVisible] = useState(true);
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };

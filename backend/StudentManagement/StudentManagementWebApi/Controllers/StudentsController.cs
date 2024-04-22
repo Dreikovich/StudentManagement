@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementWebApi.Dtos;
 using StudentManagementWebApi.Repositories;
@@ -15,6 +16,7 @@ public class StudentsController : ControllerBase
         _studentRepository = studentRepository;
     }
     
+    // [Authorize]
     [HttpGet]
     public IActionResult GetAllStudents([FromQuery] string search = null, [FromQuery] List<string> filters = null)
     {

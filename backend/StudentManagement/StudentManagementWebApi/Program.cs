@@ -1,4 +1,8 @@
 
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StudentManagementWebApi.Attributes;
 using StudentManagementWebApi.Repositories;
@@ -28,6 +32,26 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader();
     });
 });
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:SecretKey"])),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true
+        };
+    });
+
 //for the purpose of this project, we are disabling the implicit required attribute for non-nullable reference types
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
@@ -39,6 +63,7 @@ builder.Services.AddScoped<IStudentGroupAssignmentRepository, StudentGroupAssign
 builder.Services.AddScoped<ISubjectTypesRepository, SubjectTypesRepository>();
 builder.Services.AddScoped<ISubjectGroupAssignmentRepository, SubjectGroupAssignmentRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
 var app = builder.Build();
 
@@ -52,6 +77,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

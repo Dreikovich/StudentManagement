@@ -5,6 +5,7 @@ import {useDispatch} from "react-redux";
 import {addStudent} from "../../../features/students/StudentSlice";
 import {v4 as uuidv4} from 'uuid';
 import FormField from "./FormFields";
+import loginService from "../../../services/LoginService";
 interface ModalProps {
     isOpen: boolean;
     closeModal: ()=>void;
@@ -26,6 +27,7 @@ const AddStudentForm: React.FC<ModalProps > = ({isOpen, closeModal}) => {
         e.preventDefault();
         const studentUuid = uuidv4();
         const studentData = { firstName, lastName, email, gender, status, studentUuid };
+        const loginData = {login, password, studentUuid};
 
         studentService.postStudent(studentData )
             .then((newStudent) => {
@@ -36,30 +38,52 @@ const AddStudentForm: React.FC<ModalProps > = ({isOpen, closeModal}) => {
                 setFirstName('');
                 setLastName('');
                 setEmail('');
-                setGender('')
-                setStatus('')
-                closeModal()
+                setGender('');
+                setStatus('');
+                closeModal();
             })
             .catch(() => {
                 toast.error("Failed to create student.");
             });
+
+        loginService.postLogin(loginData)
+            .then((newLogin) => {
+                toast.success("Login and password created successfully!");
+                setLogin('');
+                setPassword('');
+            })
+            .catch(() => {
+                toast.error("Failed to create login.");
+            });
     };
 
+    const generateLogin = (email: string, name:string) => {
+        if(email){
+            return email;
+        }
+        else if(name){
+            return name+Math.floor(Math.random()*1000).toString();
+        }
+        else{
+            const randomString = Math.random().toString(36).substring(2, 7);
+            const randomNumber = Math.floor(Math.random() * 1000).toString();
+            return randomString + randomNumber;
+        }
+    }
 
+    const generatePassword = () => {
+        const length = 12;
+        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+        let password = "";
+        for(let i=0, n=charset.length; i<length; i++){
+            password += charset.charAt(Math.floor(Math.random()*n));
+        }
+        return password;
+    }
 
     const handleGenerateCredentials = () => {
-        // Implement the logic to generate credentials here
-        if(email.length!==0){
-            setLogin(email);
-            setPassword('password');
-            return;
-        }
-
-        setPassword('password')
-
-
-
-
+        setLogin(generateLogin(email, firstName));
+        setPassword(generatePassword());
     }
 
     return (
@@ -123,7 +147,6 @@ const AddStudentForm: React.FC<ModalProps > = ({isOpen, closeModal}) => {
                                                 <>
                                                     <FormField label="Login" id="login" type="text" value={login} onChange={(e) => setLogin(e.target.value)} required={true}/>
                                                     <FormField label="Password" id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required={true}/>
-
                                                 </>
                                             }
                                             <div

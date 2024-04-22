@@ -5,16 +5,17 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Navbar from "./components/navbar/Navbar";
 import Students from "./pages/students/Students";
 import AttendanceList from "./pages/attendance/AttendanceList";
-import AddStudentForm from "./pages/Forms/AddStudentForm/AddStudentForm";
-import {AssignGroups} from "./pages/Forms/AssignGroups/AssignGroups";
+import AddStudentForm from "./components/Forms/AddStudentForm/AddStudentForm";
+import {AssignGroups} from "./components/Forms/AssignGroups/AssignGroups";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DeansOffice from "./pages/DeansOffice/DeansOffice";
 import SubjectsComponent from "./components/subject/SubjectComponent";
-import AssignGroupToSubject from "./pages/Forms/AssignGroupToSubject/AssignGroupToSubject";
+import AssignGroupToSubject from "./components/Forms/AssignGroupToSubject/AssignGroupToSubject";
 import AttendanceComponent from "./components/attendance/AttendanceComponent";
 import GradesComponent from "./components/grades/GradesComponent";
 import StudentManagement from "./components/students/StudentManagement";
+import LoginComponent from "./components/login/LoginComponent";
 
 
 
@@ -36,8 +37,8 @@ function App() {
                       <Route path="/deans-office/subject-student-assignment" element={<AssignGroupToSubject/>} />
                       <Route path="/deans-office/attendance" element={<AttendanceComponent />} />
                       <Route path="/deans-office/grades" element={<GradesComponent />} />
+                      <Route path='/signin' element={<LoginComponent/>} />
                   </Routes>
-
               </div>
           </div>
       </BrowserRouter>

@@ -5,7 +5,7 @@
     import {Teacher} from "../../services/TeacherService";
     import {SubjectTypes, SubjectTypesService} from "../../services/SubjectTypesService";
     import {toast} from "react-toastify";
-    import AssignGroupToSubject from "../../pages/Forms/AssignGroupToSubject/AssignGroupToSubject";
+    import AssignGroupToSubject from "../Forms/AssignGroupToSubject/AssignGroupToSubject";
 
     type SubjectComponent = {
         typeID: string;
