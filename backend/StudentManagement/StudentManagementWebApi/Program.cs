@@ -64,6 +64,7 @@ builder.Services.AddScoped<ISubjectTypesRepository, SubjectTypesRepository>();
 builder.Services.AddScoped<ISubjectGroupAssignmentRepository, SubjectGroupAssignmentRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
 
 var app = builder.Build();
 

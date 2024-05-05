@@ -16,6 +16,8 @@ import AttendanceComponent from "./components/attendance/AttendanceComponent";
 import GradesComponent from "./components/grades/GradesComponent";
 import StudentManagement from "./components/students/StudentManagement";
 import LoginComponent from "./components/login/LoginComponent";
+import Calendar from "./components/calendar/Calendar";
+
 
 
 
@@ -38,6 +40,8 @@ function App() {
                       <Route path="/deans-office/attendance" element={<AttendanceComponent />} />
                       <Route path="/deans-office/grades" element={<GradesComponent />} />
                       <Route path='/signin' element={<LoginComponent/>} />
+                      <Route path='/calendar' element={<Calendar/>} />
+
                   </Routes>
               </div>
           </div>
