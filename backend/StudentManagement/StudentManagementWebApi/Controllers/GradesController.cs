@@ -1,3 +1,4 @@
+using Messaging.Services;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementWebApi.Dtos;
 using StudentManagementWebApi.Repositories;
@@ -8,11 +9,14 @@ namespace StudentManagementWebApi.Controllers;
 [Route("api/[controller]")]
 public class GradesController : ControllerBase
 {
-private readonly IGradeRepository _gradeRepository;
+    private readonly IGradeRepository _gradeRepository;
+    private readonly RabbitMqPublisher _publisher;
     
-    public GradesController(IGradeRepository gradeRepository)
+    
+    public GradesController(IGradeRepository gradeRepository, RabbitMqPublisher publisher, RabbitMqConnectionService connectionService)
     {
         _gradeRepository = gradeRepository;
+        _publisher = publisher;
     }
     
     [HttpPost]
@@ -21,6 +25,17 @@ private readonly IGradeRepository _gradeRepository;
         try
         {
             _gradeRepository.AddGrade(gradeDto);
+            Task.Run(() =>
+            {
+                try
+                {
+                    _publisher.Publish("Grade added successfully.");
+                }
+                catch (Exception publishEx)
+                {
+                    Console.WriteLine($"Failed to publish message: {publishEx.Message}");
+                }
+            });
             return Ok();
         }
         catch (Exception ex)

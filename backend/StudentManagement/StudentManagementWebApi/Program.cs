@@ -1,6 +1,6 @@
-
-using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Messaging.Configuration;
+using Messaging.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -51,6 +51,10 @@ builder.Services
             ValidateIssuerSigningKey = true
         };
     });
+
+builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
+builder.Services.AddSingleton<RabbitMqConnectionService>();
+builder.Services.AddSingleton<RabbitMqPublisher>();
 
 //for the purpose of this project, we are disabling the implicit required attribute for non-nullable reference types
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
