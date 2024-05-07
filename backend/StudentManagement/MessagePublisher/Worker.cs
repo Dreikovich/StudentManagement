@@ -1,11 +1,11 @@
 using System.Text;
-using Messaging.Configuration;
-using Messaging.Services;
+using MessagePublisher.Services;
+using MessagePublisher.Configuration;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Messaging;
+namespace MessagePublisher;
 
 public class Worker : BackgroundService
 {

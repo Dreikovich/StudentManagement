@@ -1,8 +1,8 @@
-using Messaging.Configuration;
+using MessagePublisher.Configuration;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace Messaging.Services;
+namespace MessagePublisher.Services;
 
 public class RabbitMqConnectionService
 {

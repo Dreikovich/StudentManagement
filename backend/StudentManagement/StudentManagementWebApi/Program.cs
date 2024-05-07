@@ -1,6 +1,6 @@
 using System.Text;
-using Messaging.Configuration;
-using Messaging.Services;
+using MessagePublisher.Configuration;
+using MessagePublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;

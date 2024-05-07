@@ -1,4 +1,4 @@
-using Messaging.Services;
+using MessagePublisher.Services;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementWebApi.Dtos;
 using StudentManagementWebApi.Repositories;

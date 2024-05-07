@@ -1,4 +1,4 @@
-namespace Messaging.Services;
+namespace MessagePublisher.Services;
 
 public interface IMessagePublisher
 {

@@ -1,4 +1,4 @@
-namespace Messaging.Configuration;
+namespace MessagePublisher.Configuration;
 
 public class RabbitMqConfiguration
 {

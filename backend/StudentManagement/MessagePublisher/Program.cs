@@ -1,7 +1,7 @@
 
-using Messaging;
-using Messaging.Configuration;
-using Messaging.Services;
+using MessagePublisher;
+using MessagePublisher.Configuration;
+using MessagePublisher.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
