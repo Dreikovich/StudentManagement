@@ -13,7 +13,7 @@ public class GradesController : ControllerBase
     private readonly RabbitMqPublisher _publisher;
     
     
-    public GradesController(IGradeRepository gradeRepository, RabbitMqPublisher publisher, RabbitMqConnectionService connectionService)
+    public GradesController(IGradeRepository gradeRepository, RabbitMqPublisher publisher)
     {
         _gradeRepository = gradeRepository;
         _publisher = publisher;

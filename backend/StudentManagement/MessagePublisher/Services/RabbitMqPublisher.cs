@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using MessagePublisher.Configuration;
 using Microsoft.Extensions.Options;

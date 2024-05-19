@@ -2,10 +2,6 @@
 using MessagePublisher.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RabbitMQ.Client.Events;
-using RabbitMQ.Client;
-using System;
-using System.Threading;
 
 namespace MessageClient;
 
@@ -21,39 +17,29 @@ public class Program
         var services = new ServiceCollection();
         services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMqConfiguration"));
         services.AddSingleton<RabbitMqConnectionService>();
+        services.AddTransient<MessageConsumer>();
         var serviceProvider = services.BuildServiceProvider();
 
         var rabbitMqConnectionService = serviceProvider.GetRequiredService<RabbitMqConnectionService>();
+        string queueName = rabbitMqConnectionService.GetQueueName();
 
         if (rabbitMqConnectionService == null)
         {
             Console.WriteLine("RabbitMqConnectionService is null");
             return;
         }
-
-        var channel = rabbitMqConnectionService.CreateModel();
-        var consumer = new EventingBasicConsumer(channel);
-
-        consumer.Received += async (ch, ea) =>
+        
+        var messageConsumer = serviceProvider.GetRequiredService<MessageConsumer>();
+        
+        messageConsumer.StartConsuming();
+        
+        Console.CancelKeyPress += (sender, e) =>
         {
-            var body = ea.Body.ToArray(); // Convert body to array
-            channel.BasicAck(ea.DeliveryTag, false); // Acknowledge receipt of the message
-            Console.WriteLine($"Received message: {System.Text.Encoding.UTF8.GetString(body)}");
-            await Task.Yield(); // Yield to keep UI responsive or manage asynchronous flows
+            Console.WriteLine("Stopping consumer...");
+            messageConsumer.StopConsuming();
+            e.Cancel = true;
         };
-
-        string consumerTag = channel.BasicConsume(
-            queue: rabbitMqConnectionService.GetQueueName(),
-            autoAck: false,
-            consumer: consumer
-        );
-
-        Console.WriteLine("Consumer is running. Press Ctrl+C to exit.");
-
-        // Keep the application running until manually stopped
-        while (true)
-        {
-            Thread.Sleep(Timeout.Infinite);
-        }
+        
+        Thread.Sleep(Timeout.Infinite);
     }
 }
