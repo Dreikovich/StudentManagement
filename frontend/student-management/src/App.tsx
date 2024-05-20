@@ -17,6 +17,7 @@ import GradesComponent from "./components/grades/GradesComponent";
 import StudentManagement from "./components/students/StudentManagement";
 import LoginComponent from "./components/login/LoginComponent";
 import Calendar from "./components/calendar/Calendar";
+import Notification from "./components/notification/Notification";
 
 
 
@@ -41,6 +42,7 @@ function App() {
                       <Route path="/deans-office/grades" element={<GradesComponent />} />
                       <Route path='/signin' element={<LoginComponent/>} />
                       <Route path='/calendar' element={<Calendar/>} />
+                      <Route path='/notification' element={<Notification/>} />
 
                   </Routes>
               </div>
