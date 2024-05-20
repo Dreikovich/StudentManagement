@@ -1,3 +1,4 @@
+using System.Text.Json;
 using MessagePublisher.Services;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementWebApi.Dtos;
@@ -11,7 +12,6 @@ public class GradesController : ControllerBase
 {
     private readonly IGradeRepository _gradeRepository;
     private readonly RabbitMqPublisher _publisher;
-    
     
     public GradesController(IGradeRepository gradeRepository, RabbitMqPublisher publisher)
     {
@@ -29,7 +29,13 @@ public class GradesController : ControllerBase
             {
                 try
                 {
-                    _publisher.Publish("Grade added successfully.");
+                    var message = new
+                    {
+                        UserId = gradeDto.StudentID.ToString(),
+                        Content = $"Grade added for student {gradeDto.StudentID} in subject {gradeDto.SubjectID} with value {gradeDto.GradeValue}"
+                    };
+                    var mesaageJson = JsonSerializer.Serialize(message);
+                    _publisher.Publish(mesaageJson);
                 }
                 catch (Exception publishEx)
                 {

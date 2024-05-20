@@ -16,6 +16,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MessagePublisher\MessagePublisher.csproj" />
+      <ProjectReference Include="..\NotificationService\NotificationService.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.0-preview.3.24172.13" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="9.0.0-preview.3.24172.13" />
     </ItemGroup>
 
 </Project>

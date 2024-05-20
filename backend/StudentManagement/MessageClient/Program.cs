@@ -17,11 +17,15 @@ public class Program
         var services = new ServiceCollection();
         services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMqConfiguration"));
         services.AddSingleton<RabbitMqConnectionService>();
-        services.AddTransient<MessageConsumer>();
+        services.AddTransient<MessageConsumer>(provided =>
+        {
+            var rabbitMqConnectionService = provided.GetRequiredService<RabbitMqConnectionService>();
+            var hubUrl = configuration.GetValue<string>("SignalRUrl");
+            return new MessageConsumer(rabbitMqConnectionService, hubUrl);
+        });
         var serviceProvider = services.BuildServiceProvider();
 
-        var rabbitMqConnectionService = serviceProvider.GetRequiredService<RabbitMqConnectionService>();
-        string queueName = rabbitMqConnectionService.GetQueueName();
+        var rabbitMqConnectionService = serviceProvider.GetService<RabbitMqConnectionService>();
 
         if (rabbitMqConnectionService == null)
         {
