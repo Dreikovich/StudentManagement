@@ -17,7 +17,9 @@ public class RabbitMqConnectionService
         {
             HostName = _config.HostName,
             UserName = _config.UserName,
-            Password = _config.Password
+            Password = _config.Password,
+            RequestedHeartbeat = TimeSpan.FromSeconds(60), 
+            NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
         };
         _connection = _factory.CreateConnection();
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { connection, startConnection } from "../../services/SignalRService";
+import  {notificator}  from "../../services/SignalRService";
 
 const Notifications: React.FC = () => {
 
@@ -8,18 +8,24 @@ const Notifications: React.FC = () => {
 
     useEffect(() => {
         const initializeConnection = async () => {
-            await startConnection();
+            await notificator.startConnection()
+                .then(() => console.log("SignalR connection established."))
+                .catch((error) => console.error("Error while establishing SignalR connection:", error));
 
-            connection.on("Retrieve", (content: string) => {
-                setMessages((prevMessages) => [...prevMessages,  content ]);
-            });
+            return () => {
+                notificator.stopConnection()
+                    .then(() => console.log("SignalR connection stopped."))
+                    .catch((error) => console.error("Error while stopping SignalR connection:", error));
+            }
         };
 
         initializeConnection();
+    }, []);
 
-        return () => {
-            connection.off("Retrieve");
-        };
+    useEffect(() => {
+        notificator.subscribeNotification((content) => {
+            setMessages((prevMessages) => [...prevMessages, content]);
+        });
     }, []);
 
     console.log(messages);
