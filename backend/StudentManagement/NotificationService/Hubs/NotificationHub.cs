@@ -18,23 +18,23 @@ public class NotificationHub : Hub
         _messageClient = messageClient;
     }
     
-    public override Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
-        var logger = Context.GetHttpContext().RequestServices.GetRequiredService<ILogger<NotificationHub>>();
-        var claims = Context.User?.Claims;
-        if (claims != null)
-        {
-            foreach (var claim in claims)
-            {
-                logger.LogInformation($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-            }
-        }
+        // var logger = Context.GetHttpContext().RequestServices.GetRequiredService<ILogger<NotificationHub>>();
+        // var claims = Context.User?.Claims;
+        // if (claims != null)
+        // {
+        //     foreach (var claim in claims)
+        //     {
+        //         logger.LogInformation($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+        //     }
+        // }
         string userId = Context.UserIdentifier;
         if (!string.IsNullOrEmpty(userId))
         {
             _connectedClients.TryAdd(Context.ConnectionId, userId);
         }
-        return base.OnConnectedAsync();
+        await base.OnConnectedAsync();
     }
     
     public override Task OnDisconnectedAsync(Exception exception)

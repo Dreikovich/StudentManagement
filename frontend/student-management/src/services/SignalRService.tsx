@@ -1,7 +1,7 @@
 import * as signalR from "@microsoft/signalr";
 
 const hubUrl = "http://localhost:5192/notificationHub";
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MGNkZGVhYS0yNzNjLTRkMDUtYTI1Ny02MTZjYWVkNDk3NjgiLCJ1bmlxdWVfbmFtZSI6Imt1QGdtYWlsLmNvbSIsImp0aSI6ImQ1ZmY3YzVjLTg4ZDItNGY3Mi04MDBjLTczNmYxNjFjNThiNSIsIm5hbWVpZCI6IjkwY2RkZWFhLTI3M2MtNGQwNS1hMjU3LTYxNmNhZWQ0OTc2OCIsIm5iZiI6MTcxNjU5MzQ2OCwiZXhwIjoxNzE2Njc5ODY4LCJpYXQiOjE3MTY1OTM0Njh9.6xO4SFjXdc-_N0ryEwi9RYoF0OC5Jhq5N3lnEDo6Msg";
+const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MGNkZGVhYS0yNzNjLTRkMDUtYTI1Ny02MTZjYWVkNDk3NjgiLCJ1bmlxdWVfbmFtZSI6Imt1QGdtYWlsLmNvbSIsImp0aSI6ImMyZDVjMzA2LTBhZjYtNGEzYy05MWU3LTAwNzk0OGU3YWNkYSIsIm5hbWVpZCI6IjkwY2RkZWFhLTI3M2MtNGQwNS1hMjU3LTYxNmNhZWQ0OTc2OCIsIm5iZiI6MTcxNjcyNDkzMywiZXhwIjoxNzE2ODExMzMzLCJpYXQiOjE3MTY3MjQ5MzN9.crjkzp8yaf-ftPg6GREdaayUWo7AjRQPCERS6kWaXQs";
 
 class Notificator {
     private connection: signalR.HubConnection | null = null;
@@ -9,9 +9,12 @@ class Notificator {
     private initializeConnection(): void {
         if (!this.connection) {
             this.connection = new signalR.HubConnectionBuilder()
+                .configureLogging(signalR.LogLevel.Debug)
                 .withUrl(hubUrl,{
+                    skipNegotiation: true,
                     accessTokenFactory: () => token,
-                    withCredentials: false
+                    withCredentials: false,
+                    transport: signalR.HttpTransportType.WebSockets
                 })
                 .configureLogging(signalR.LogLevel.Information)
                 .withAutomaticReconnect()
