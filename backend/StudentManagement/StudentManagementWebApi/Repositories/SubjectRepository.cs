@@ -50,6 +50,45 @@ public class SubjectRepository : ISubjectRepository
         }).ToList();
         return result;
     }
+
+    public SubjectDto GetSubjectById(int subjectId, int typeId)
+            {
+        try
+        {
+            string query = $"select * from SubjectComponents " +
+                           $"JOIN Subjects S on SubjectComponents.SubjectID = S.SubjectID " +
+                           $"JOIN Teachers T on SubjectComponents.TeacherID = T.TeacherID " +
+                           $"JOIN SubjectTypes ST on SubjectComponents.TypeID = ST.TypeID " +
+                           $"where S.SubjectID = {subjectId}";
+            var subjectsDataTable = _databaseHelper.ExecuteQuery(query);
+            var subjectsEntities = _dataHelper.DataTableToList<SubjectEntity>(subjectsDataTable).Where(s => s.TypeID == typeId);
+ 
+            SubjectDto subjectDto = new SubjectDto()
+            {
+                SubjectName = subjectsEntities.First().SubjectName,                                 
+                SubjectID = subjectsEntities.First().SubjectID,
+                SubjectComponents = subjectsEntities.Select(s => new TypeDto
+                {
+                    TypeID = s.TypeID,
+                    TypeName = s.TypeName,
+                    Hours = s.Hours,
+                    Teacher = new Teacher
+                    {
+                        TeacherID = s.Teacher.TeacherID,
+                        TeacherFirstName = s.Teacher.TeacherFirstName,
+                        TeacherLastName = s.Teacher.TeacherLastName,
+                        TeacherEmail = s.Teacher.TeacherEmail
+                    }
+                }).ToList()
+            };
+            return subjectDto;
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
     
     private int FindSubjectId(string subjectName)
     {

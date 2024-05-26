@@ -13,10 +13,14 @@
         <Link>.dockerignore</Link>
       </Content>
     </ItemGroup>
+    <ItemGroup>
+        <None Update="..\NotificationService\appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\MessagePublisher\MessagePublisher.csproj" />
-      <ProjectReference Include="..\NotificationService\NotificationService.csproj" />
     </ItemGroup>
 
     <ItemGroup>

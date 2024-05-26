@@ -57,24 +57,27 @@ public class LoginController : ControllerBase
     private string GenerateToken(LoginDto loginDto)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes("superSecretKey@345:)");
-        var expires = DateTime.UtcNow.AddHours(1);
+        var key = Encoding.ASCII.GetBytes("superSecretKey@345:)superSecretKey@345:)");
+        var expires = DateTime.UtcNow.AddHours(24);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
+                new Claim(JwtRegisteredClaimNames.Sub, loginDto.StudentUuid.ToString()), 
                 new Claim(ClaimTypes.Name, loginDto.Login),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, loginDto.StudentUuid.ToString())
             }),
             Expires = expires,
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
-        
+    
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
         _loginRepository.SaveTokenToDatabase(tokenString, expires, loginDto.StudentUuid);
         return tokenString;
     }
+
 }

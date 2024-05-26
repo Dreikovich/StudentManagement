@@ -1,12 +1,11 @@
-using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using MessagePublisher.Services;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NotificationService.Models;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace MessageClient;
 
@@ -40,6 +39,39 @@ public class MessageConsumer
         _cancellationTokenSource.Cancel();
     }
     
+    public List<Message> GetPendingMessagesFromRabbitMq(string userId)
+    {
+        var messages = new List<Message>();
+        
+        var queueName = _rabbitMqConnectionService.GetQueueName();
+        var channel = _rabbitMqConnectionService.CreateModel();
+        
+        var queueDeclareOk = channel.QueueDeclarePassive(queueName);
+        var messageCount = queueDeclareOk.MessageCount;
+        for(var i = 0; i < messageCount; i++)
+        {
+            var result = channel.BasicGet(queueName, false);
+            if (result != null)
+            {
+                var body = result.Body.ToArray();
+                var messageJson = System.Text.Encoding.UTF8.GetString(body);
+                var message = JsonSerializer.Deserialize<Message>(messageJson);
+                // if (message.UserId == userId)
+                // {
+                //     messages.Add(message);
+                //     channel.BasicAck(result.DeliveryTag, false);
+                // }
+                // else
+                // {
+                //     channel.BasicNack(result.DeliveryTag, false, true);
+                // }
+                messages.Add(message);
+                channel.BasicAck(result.DeliveryTag, false);
+            }
+        }
+        return messages;
+    }
+    
     private async Task ProcessMessages(IModel channel, string queueName, CancellationToken cancellationToken)
     {
         int retryCount = 0;
@@ -61,9 +93,9 @@ public class MessageConsumer
                     {
                         var body = result.Body.ToArray();
                         var messageJson = System.Text.Encoding.UTF8.GetString(body);
-                        var message = JsonSerializer.Deserialize<UserMessage>(messageJson);
+                        var message = JsonSerializer.Deserialize<Message>(messageJson);
                         Console.WriteLine($"Received message for user {message.UserId}: {message.Content}");
-                        await SendMessageToHub(message.Content);
+                        await SendMessageToHub(message.UserId, message.Content);
                         channel.BasicAck(result.DeliveryTag, false);
                         
                     }
@@ -97,7 +129,7 @@ public class MessageConsumer
         }
     }
     
-    private async Task SendMessageToHub(string message)
+    private async Task SendMessageToHub(string userId, string message)
     {
         
         var hubConnection = new HubConnectionBuilder()
@@ -116,7 +148,7 @@ public class MessageConsumer
         {
             await hubConnection.StartAsync();
             Console.WriteLine("SignalR connection established.");
-            await hubConnection.SendAsync("SendToAll", message);
+            await hubConnection.SendAsync("SendMessageToStudent", userId, message);
 
         }
         catch (Exception ex)
@@ -130,10 +162,4 @@ public class MessageConsumer
         }
     }
     
-    
-    public class UserMessage
-    {
-        public string UserId { get; set; }
-        public string Content { get; set; }
-    }
 }

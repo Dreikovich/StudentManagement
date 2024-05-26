@@ -1,9 +1,13 @@
+using System.Security.Claims;
 using System.Text;
+using MessageClient;
 using MessagePublisher.Configuration;
 using MessagePublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NotificationService.Hubs;
 using StudentManagementWebApi.Attributes;
 using StudentManagementWebApi.Repositories;
 
@@ -11,8 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Configure services and access the connection string
 builder.Configuration.AddJsonFile("appsettings.json");
-
-// Add services to the container.
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,14 +25,16 @@ builder.Services.AddSwaggerGen(c =>
     // Add a custom SchemaFilter to exclude properties marked with SwaggerExcludeAttribute
     c.SchemaFilter<SwaggerExcludeFilter>();
 });
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", build =>
-    {
-        build.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
 });
 
 builder.Services
@@ -42,19 +46,37 @@ builder.Services
     })
     .AddJwtBearer(o =>
     {
+        var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:SecretKey"]);
         o.TokenValidationParameters = new TokenValidationParameters
         {
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:SecretKey"])),
+            IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = false,
             ValidateAudience = false,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true
         };
+        
     });
+
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+
+});
 
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
 builder.Services.AddSingleton<RabbitMqConnectionService>();
 builder.Services.AddSingleton<RabbitMqPublisher>();
+builder.Services.AddSingleton<NotificationHub>();
+builder.Services.AddTransient<MessageConsumer>(provided =>
+{
+    var rabbitMqConnectionService = provided.GetRequiredService<RabbitMqConnectionService>();
+    var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json")
+        .Build();
+    var hubUrl = configuration.GetValue<string>("SignalRUrl");
+    return new MessageConsumer(rabbitMqConnectionService, hubUrl);
+});
 
 //for the purpose of this project, we are disabling the implicit required attribute for non-nullable reference types
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
@@ -77,14 +99,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors("AllowAll");
 }
-
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHub<NotificationHub>("/notificationHub");
 app.MapControllers();
 
 app.Run();

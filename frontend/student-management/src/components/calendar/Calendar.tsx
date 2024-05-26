@@ -1,4 +1,4 @@
-import React from 'react';
+ import React from 'react';
 import 'tailwindcss/tailwind.css';
 
 interface Event {

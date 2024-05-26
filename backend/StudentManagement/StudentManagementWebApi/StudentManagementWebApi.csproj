@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.24" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
@@ -25,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MessagePublisher\MessagePublisher.csproj" />
+      <ProjectReference Include="..\NotificationService\NotificationService.csproj" />
     </ItemGroup>
 
     <ItemGroup>

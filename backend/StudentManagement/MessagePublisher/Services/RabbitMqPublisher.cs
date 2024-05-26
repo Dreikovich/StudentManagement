@@ -3,7 +3,6 @@ using System.Text;
 using MessagePublisher.Configuration;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-
 namespace MessagePublisher.Services;
 
 public class RabbitMqPublisher 
@@ -13,7 +12,7 @@ public class RabbitMqPublisher
     public RabbitMqPublisher(RabbitMqConnectionService connectionService)
     {
         _channel = connectionService.CreateModel();
-    }
+    }                                                                                                                                                   
     
     public void Publish(string message)
     {
@@ -27,6 +26,5 @@ public class RabbitMqPublisher
         {
             Console.WriteLine("Failed to publish message: " + ex.Message);
         }
-        
     }
 }

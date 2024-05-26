@@ -45,6 +45,23 @@ public class StudentRepository : IStudentRepository
             throw;
         }
     }
+
+    public StudentDto GetStudentById(int studentId)
+    {
+        try
+        {
+            string query =
+                $"Select S.StudentID, S.FirstName, S.LastName, S.Email from students as S WHERE S.StudentID = {studentId}";
+            var studentDataTable = _databaseHelper.ExecuteQuery(query);
+            var studentEntity = _dataHelper.DataTableToList<StudentEntity>(studentDataTable).FirstOrDefault();
+            return _studentMapper.MapStudentEntityToStudentDto(studentEntity);
+        }
+        catch(Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+    }
     
     public void AddStudent(StudentDto studentDto)
     {
