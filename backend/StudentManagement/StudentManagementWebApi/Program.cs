@@ -67,16 +67,16 @@ builder.Services.AddSignalR(options =>
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
 builder.Services.AddSingleton<RabbitMqConnectionService>();
 builder.Services.AddSingleton<RabbitMqPublisher>();
-builder.Services.AddSingleton<NotificationHub>();
-builder.Services.AddTransient<MessageConsumer>(provided =>
-{
-    var rabbitMqConnectionService = provided.GetRequiredService<RabbitMqConnectionService>();
-    var configuration = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json")
-        .Build();
-    var hubUrl = configuration.GetValue<string>("SignalRUrl");
-    return new MessageConsumer(rabbitMqConnectionService, hubUrl);
-});
+// builder.Services.AddTransient<MessageConsumer>(provided =>
+// {
+//     var rabbitMqConnectionService = provided.GetRequiredService<RabbitMqConnectionService>();
+//     var configuration = new ConfigurationBuilder()
+//         .AddJsonFile("appsettings.json")
+//         .Build();
+//     var hubUrl = configuration.GetValue<string>("SignalRUrl");
+//     return new MessageConsumer(rabbitMqConnectionService, hubUrl);
+// });
+builder.Services.AddStackExchangeRedisCache(config=>config.Configuration = builder.Configuration.GetConnectionString("Redis"));
 
 //for the purpose of this project, we are disabling the implicit required attribute for non-nullable reference types
 builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
@@ -105,7 +105,6 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHub<NotificationHub>("/notificationHub");
 app.MapControllers();
 
 app.Run();

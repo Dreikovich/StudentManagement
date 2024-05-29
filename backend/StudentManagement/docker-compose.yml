@@ -19,3 +19,9 @@
     build:
       context: .
       dockerfile: NotificationService/Dockerfile
+
+  messagelistener:
+    image: messagelistener
+    build:
+      context: .
+      dockerfile: MessageListener/Dockerfile

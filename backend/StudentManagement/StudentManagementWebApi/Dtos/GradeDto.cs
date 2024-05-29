@@ -7,4 +7,5 @@ public class GradeDto
     public int TypeID { get; set; }
     public int TeacherID { get; set; }
     public string GradeValue { get; set; }
+    public Guid? StudentUuid { get; set; }
 }

@@ -8,6 +8,7 @@ using MessageClient;
 using MessagePublisher.Configuration;
 using MessagePublisher.Services;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Distributed;
 using NotificationService.Hubs;
 using NotificationService.Providers;
 
@@ -20,6 +21,9 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
+    options.KeepAliveInterval = TimeSpan.FromMinutes(5);
+    options.ClientTimeoutInterval = TimeSpan.FromMinutes(5);
+    options.HandshakeTimeout = TimeSpan.FromMinutes(5);
 });
 
 // Add JWT Authentication
@@ -85,10 +89,10 @@ builder.Services
             }
         };
     });
-
+builder.Services.AddScoped<NotificationHub>();
 builder.Services.AddTransient<RabbitMqConnectionService>();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
-builder.Services.AddSingleton<MessageConsumer>(provided =>
+builder.Services.AddSingleton<MessageConsumer>(provider =>
 {
     var configuration = new ConfigurationBuilder()
         .AddJsonFile("appsettings.json")
@@ -97,7 +101,16 @@ builder.Services.AddSingleton<MessageConsumer>(provided =>
     var rabbitMqConnectionService = new RabbitMqConnectionService(Options.Create(rabbitMqConfiguration));
    
     var hubUrl = configuration.GetValue<string>("SignalRUrl");
-    return new MessageConsumer(rabbitMqConnectionService, hubUrl);
+    var hubContext = provider.GetRequiredService<IHubContext<NotificationHub>>();
+    var logger = provider.GetRequiredService<ILogger<MessageConsumer>>();
+    var cache = provider.GetRequiredService<IDistributedCache>();
+    return new MessageConsumer(rabbitMqConnectionService, hubUrl, hubContext, logger, cache);
+});
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.InstanceName = "SampleInstance";
 });
 
 var app = builder.Build();
@@ -120,6 +133,7 @@ app.UseHttpsRedirection();
 
 // Add Authentication and Authorization middleware
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

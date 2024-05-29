@@ -1,7 +1,10 @@
 ﻿using MessagePublisher.Configuration;
 using MessagePublisher.Services;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MessageClient;
 
@@ -10,18 +13,22 @@ public class Program
     public static void Main(string[] args)
     {
         var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
-        
-        // Set up Dependency Injection
+
         var services = new ServiceCollection();
         services.Configure<RabbitMqConfiguration>(configuration.GetSection("RabbitMqConfiguration"));
         services.AddSingleton<RabbitMqConnectionService>();
-        services.AddTransient<MessageConsumer>(provided =>
+        services.AddSingleton<MessageConsumer>(provided =>
         {
             var rabbitMqConnectionService = provided.GetRequiredService<RabbitMqConnectionService>();
             var hubUrl = configuration.GetValue<string>("SignalRUrl");
-            return new MessageConsumer(rabbitMqConnectionService, hubUrl);
+            var hubContext = provided.GetRequiredService<IHubContext<Hub>>();
+            var logger = provided.GetRequiredService<ILogger<MessageConsumer>>();
+            var cache = provided.GetRequiredService<IDistributedCache>();
+            
+            return new MessageConsumer(rabbitMqConnectionService, hubUrl, hubContext, logger, cache);
         });
         var serviceProvider = services.BuildServiceProvider();
 
@@ -35,7 +42,7 @@ public class Program
         
         var messageConsumer = serviceProvider.GetRequiredService<MessageConsumer>();
         
-        messageConsumer.StartConsuming();
+        // messageConsumer.StartConsuming();
         
         Console.CancelKeyPress += (sender, e) =>
         {

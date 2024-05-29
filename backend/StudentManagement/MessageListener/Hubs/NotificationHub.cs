@@ -1,24 +1,19 @@
-using System.Collections.Concurrent;
-using System.Runtime.Loader;
-using MessageClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Distributed;
-using NotificationService.Models;
 
-namespace NotificationService.Hubs;
+namespace MessageListener.Hubs;
 
 [Authorize]
 public class NotificationHub : Hub
 {
-    
-    private readonly MessageConsumer _messageClient;
+    private readonly MessageConsumer.MessageConsumer _messageConsumer;
     private readonly IDistributedCache _connectedClientsCache;
     private readonly ILogger<NotificationHub> _logger;
     
-    public NotificationHub(MessageConsumer messageClient, IDistributedCache cache, ILogger<NotificationHub> logger)
+    public NotificationHub(MessageConsumer.MessageConsumer messageConsumer, IDistributedCache cache, ILogger<NotificationHub> logger)
     {
-        _messageClient = messageClient;
+        _messageConsumer = messageConsumer;
         _connectedClientsCache = cache;
         _logger = logger;
     }
@@ -40,8 +35,10 @@ public class NotificationHub : Hub
         string userId = Context.UserIdentifier;
         if (!string.IsNullOrEmpty(userId))
         {
+            
             await _connectedClientsCache.SetStringAsync(Context.ConnectionId, userId);
             await _connectedClientsCache.SetStringAsync(userId, Context.ConnectionId);
+
         }
         await base.OnConnectedAsync();
     }
@@ -67,13 +64,20 @@ public class NotificationHub : Hub
     public async Task NotifyConnectedUsers()
     {
         string userId = Context.UserIdentifier;
-        if(!string.IsNullOrEmpty(userId))
-        {
-            var messages = await _messageClient.GetPendingMessagesFromRabbitMqAsync(userId);
-            foreach (var message in messages)
-            {
-                await Clients.User(userId).SendAsync("Retrieve", message);
-            }
-        }   
+        // if(!string.IsNullOrEmpty(userId))
+        // {
+        //     var messages = await _messageConsumer.GetPendingMessagesFromRabbitMqAsync(userId);
+        //     foreach (var message in messages)
+        //     {
+        //         await Clients.User(userId).SendAsync("Retrieve", message);
+        //     }
+        // }   
+    }
+    
+    
+    public async Task<bool> IsUserConnected(string userId)
+    {
+        var connectionId = await _connectedClientsCache.GetStringAsync(userId);
+        return !string.IsNullOrEmpty(connectionId);
     }
 }

@@ -15,10 +15,6 @@ const Notifications: React.FC = () => {
             await notificator.startConnection()
                 .then(() =>
                 {
-                    notificator.subscribeNotification((message:Message) => {
-                        setMessages((prevMessages) => [...prevMessages, message]);
-                    });
-
                     console.log("SignalR connection established.")
                 })
                 .catch((error) => console.error("Error while establishing SignalR connection:", error));
@@ -30,8 +26,15 @@ const Notifications: React.FC = () => {
             };
         };
 
-        initializeConnection();
+        initializeConnection().then(() => {
+            console.log("I amd here to subscribe to notifications.")
+            notificator.connection?.on("retrieve", (message:any) => {
+                console.log("received message: ", message);
+                setMessages((prevMessages) => [...prevMessages, message]);
+            });
+        });
     }, []);
+
 
 
 

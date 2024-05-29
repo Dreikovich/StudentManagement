@@ -1,6 +1,7 @@
 using System.Text.Json;
 using MessagePublisher.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using NotificationService.Hubs;
 using NotificationService.Models;
 using StudentManagementWebApi.Dtos;
@@ -15,19 +16,17 @@ public class GradesController : ControllerBase
     private readonly IGradeRepository _gradeRepository;
     private readonly RabbitMqPublisher _publisher;
     private readonly IStudentRepository _studentRepository;
-    private readonly ISubjectTypesRepository _subjectTypesRepository;
     private readonly ISubjectRepository _subjectRepository;
-    private readonly NotificationHub _notificationHub;
+    private readonly IDistributedCache _connectedClientsCache;
 
     public GradesController(IGradeRepository gradeRepository, IStudentRepository studentRepository,
-        ISubjectTypesRepository subjectTypesRepository, ISubjectRepository subjectRepository, RabbitMqPublisher publisher, NotificationHub notificationHub)
+        ISubjectTypesRepository subjectTypesRepository, ISubjectRepository subjectRepository, RabbitMqPublisher publisher, IDistributedCache cache)
     {
         _gradeRepository = gradeRepository;
         _studentRepository = studentRepository;
-        _subjectTypesRepository = subjectTypesRepository;
         _subjectRepository = subjectRepository;
         _publisher = publisher;
-        _notificationHub = notificationHub;
+        _connectedClientsCache = cache;
     }
 
     [HttpPost]
@@ -42,15 +41,6 @@ public class GradesController : ControllerBase
                 {
                     var message = ProcessTheDto(gradeDto);
                     var messageJson = JsonSerializer.Serialize(message);
-                    if(_notificationHub.IsClientConnected(gradeDto.StudentID.ToString()))
-                    {
-                        _notificationHub.SendMessageToStudent(gradeDto.StudentID.ToString(), messageJson);
-                    }
-                    else
-                    {
-                        _publisher.Publish(messageJson);
-                    }
-                    
                     _publisher.Publish(messageJson);
                 }
                 catch (Exception publishEx)
@@ -81,12 +71,11 @@ public class GradesController : ControllerBase
         var message = new Message
         {
             MessageId = Guid.NewGuid().ToString(),
-            UserId = gradeDto.StudentID.ToString(),
+            UserId = student.StudentUuid,
             Content = $"Grade added for student {student.FirstName}{student.LastName} in subject {subject.SubjectName} {subject.SubjectComponents.First().TypeName} with value {gradeDto.GradeValue}"
         };
         return message;
 
     }
-    
 }
 
