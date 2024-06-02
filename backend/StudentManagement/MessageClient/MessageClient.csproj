@@ -9,9 +9,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
     <ItemGroup>
         <None Update="..\NotificationService\appsettings.json">
@@ -20,23 +20,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MessagePublisher\MessagePublisher.csproj" />
+        <ProjectReference Include="..\MessagePublisher\MessagePublisher.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="9.0.0-preview.4.24267.6" />
-      <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="9.0.0-preview.4.24267.6" />
-      <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0-preview.24216.2">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0-preview.4.24267.6" />
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="9.0.0-preview.4.24267.6"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="9.0.0-preview.4.24267.6"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0-preview.24216.2">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.0-preview.4.24267.6"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.SignalR.Core">
-        <HintPath>..\..\..\..\..\..\..\usr\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.4\Microsoft.AspNetCore.SignalR.Core.dll</HintPath>
-      </Reference>
+        <Reference Include="Microsoft.AspNetCore.SignalR.Core">
+            <HintPath>..\..\..\..\..\..\..\usr\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.4\Microsoft.AspNetCore.SignalR.Core.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

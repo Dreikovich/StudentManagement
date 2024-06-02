@@ -2,7 +2,6 @@ namespace StudentManagementWebApi.Entities;
 
 public class LoginEntity
 {
-   
     public int StudentUuid { get; set; } // Foreign key linked to StudentEntity
     public string Login { get; set; }
     public string HashedPassword { get; set; }
@@ -11,6 +10,4 @@ public class LoginEntity
 
 
     //public StudentEntity Student { get; set; }
-    
-
 }

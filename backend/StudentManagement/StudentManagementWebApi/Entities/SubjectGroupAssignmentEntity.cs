@@ -7,4 +7,3 @@ public class SubjectGroupAssignmentEntity
     public int SubjectID { get; set; }
     public string SubjectName { get; set; }
 }
-

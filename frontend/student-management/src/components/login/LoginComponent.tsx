@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import FormField from "../Forms/AddStudentForm/FormFields";
 import loginService, {LoginResponse} from "../../services/LoginService";
 import { useNavigate } from 'react-router-dom';
-
-
+import {jwtDecode} from 'jwt-decode';
 
 const Login: React.FC = () => {
 
@@ -26,6 +25,10 @@ const Login: React.FC = () => {
         loginService.verifyLogin(data).then(
             (response : LoginResponse) => {
                 localStorage.setItem('token', response.token);
+                const decodedToken: any = jwtDecode(response.token);
+                const userRole = decodedToken.role;
+                localStorage.setItem('RoleFromDecodedJWT', userRole);
+                localStorage.setItem('role', response.role);
                 setLogin('');
                 setPassword('');
                 navigate('/dashboard');

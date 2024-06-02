@@ -9,17 +9,16 @@ using StudentManagementWebApi.Repositories;
 namespace StudentManagementWebApi.Controllers;
 
 [ApiController]
-
 [Route("api/[controller]")]
 public class LoginController : ControllerBase
 {
     private readonly ILoginRepository _loginRepository;
-    
+
     public LoginController(ILoginRepository loginRepository)
     {
         _loginRepository = loginRepository;
     }
-    
+
     [HttpPost("Addlogin")]
     public IActionResult AddLogin([FromBody] LoginDto loginDto)
     {
@@ -33,20 +32,22 @@ public class LoginController : ControllerBase
             return StatusCode(500, $"Internal Server Error: {ex.Message}");
         }
     }
-    
+
     [HttpPost("VerifyLogin")]
     public IActionResult Login([FromBody] LoginDto loginDto)
     {
         try
         {
+            var userUuid = _loginRepository.GetStudentUuid(loginDto.Login);
+            if (userUuid == null) return Unauthorized();
+            loginDto.StudentUuid = userUuid;
             var isValid = _loginRepository.ValidateLogin(loginDto);
-            if (!isValid)
-            {
-                return Unauthorized();
-            }
+            if (!isValid) return Unauthorized();
 
-            var tokenString = GenerateToken(loginDto);
-            return Ok(new { Token = tokenString });
+            var role = _loginRepository.GetUserRole(loginDto);
+
+            var tokenString = GenerateToken(loginDto, role);
+            return Ok(new { Token = tokenString, Role = role });
         }
         catch (Exception ex)
         {
@@ -54,7 +55,7 @@ public class LoginController : ControllerBase
         }
     }
 
-    private string GenerateToken(LoginDto loginDto)
+    private string GenerateToken(LoginDto loginDto, string role)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes("superSecretKey@345:)superSecretKey@345:)");
@@ -64,20 +65,20 @@ public class LoginController : ControllerBase
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, loginDto.StudentUuid.ToString()), 
-                new Claim(ClaimTypes.Name, loginDto.Login),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, loginDto.StudentUuid.ToString())
+                new(JwtRegisteredClaimNames.Sub, loginDto.StudentUuid),
+                new(ClaimTypes.Name, loginDto.Login),
+                new(ClaimTypes.Role, role),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(ClaimTypes.NameIdentifier, loginDto.StudentUuid)
             }),
             Expires = expires,
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
-    
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
         var tokenString = tokenHandler.WriteToken(token);
         _loginRepository.SaveTokenToDatabase(tokenString, expires, loginDto.StudentUuid);
         return tokenString;
     }
-
 }

@@ -1,13 +1,9 @@
-using System.Security.Claims;
 using System.Text;
-using MessageClient;
 using MessagePublisher.Configuration;
 using MessagePublisher.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NotificationService.Hubs;
 using StudentManagementWebApi.Attributes;
 using StudentManagementWebApi.Repositories;
 
@@ -55,14 +51,9 @@ builder.Services
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true
         };
-        
     });
 
-builder.Services.AddSignalR(options =>
-{
-    options.EnableDetailedErrors = true;
-
-});
+builder.Services.AddSignalR(options => { options.EnableDetailedErrors = true; });
 
 builder.Services.Configure<RabbitMqConfiguration>(builder.Configuration.GetSection("RabbitMqConfiguration"));
 builder.Services.AddSingleton<RabbitMqConnectionService>();
@@ -76,10 +67,12 @@ builder.Services.AddSingleton<RabbitMqPublisher>();
 //     var hubUrl = configuration.GetValue<string>("SignalRUrl");
 //     return new MessageConsumer(rabbitMqConnectionService, hubUrl);
 // });
-builder.Services.AddStackExchangeRedisCache(config=>config.Configuration = builder.Configuration.GetConnectionString("Redis"));
+builder.Services.AddStackExchangeRedisCache(config =>
+    config.Configuration = builder.Configuration.GetConnectionString("Redis"));
 
 //for the purpose of this project, we are disabling the implicit required attribute for non-nullable reference types
-builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
+builder.Services.AddControllers(options =>
+    options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
@@ -100,6 +93,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.UseAuthentication();

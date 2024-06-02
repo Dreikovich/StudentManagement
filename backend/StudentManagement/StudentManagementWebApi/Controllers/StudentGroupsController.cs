@@ -5,15 +5,15 @@ namespace StudentManagementWebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StudentGroupsController: ControllerBase
+public class StudentGroupsController : ControllerBase
 {
     private readonly IStudentGroupsRepository _studentGroupsRepository;
-    
+
     public StudentGroupsController(IStudentGroupsRepository studentGroupsRepository)
     {
         _studentGroupsRepository = studentGroupsRepository;
     }
-    
+
     [HttpGet]
     public IActionResult GetAllStudentGroups()
     {

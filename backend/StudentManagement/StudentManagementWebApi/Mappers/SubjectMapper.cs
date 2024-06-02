@@ -1,6 +1,5 @@
 namespace StudentManagementWebApi.Mappers;
 
-public class SubjectMapper :ISubjectMapper
+public class SubjectMapper : ISubjectMapper
 {
-    
 }

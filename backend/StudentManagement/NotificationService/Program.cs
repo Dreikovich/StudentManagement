@@ -1,14 +1,13 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
 using MessageClient;
 using MessagePublisher.Configuration;
 using MessagePublisher.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using NotificationService.Hubs;
 using NotificationService.Providers;
 
@@ -55,32 +54,26 @@ builder.Services
                 // If the request is for our hub...
                 var path = context.HttpContext.Request.Path;
                 if (!string.IsNullOrEmpty(accessToken) &&
-                    (path.StartsWithSegments("/NotificationHub")))
-                {
+                    path.StartsWithSegments("/NotificationHub"))
                     // Read the token out of the query string
                     context.Token = accessToken;
-                }
                 return Task.CompletedTask;
             },
             OnTokenValidated = context =>
             {
                 var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-        
+
                 // Log all claims for debugging
                 foreach (var claim in context.Principal.Claims)
-                {
                     logger.LogInformation($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-                }
-                
-                var userId = context.Principal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+
+                var userId = context.Principal
+                    .FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
 
                 if (!string.IsNullOrEmpty(userId))
                 {
                     var identity = context.Principal.Identities.FirstOrDefault(id => id.IsAuthenticated);
-                    if (identity != null)
-                    {
-                        identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
-                    }
+                    if (identity != null) identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userId));
                 }
 
                 logger.LogInformation($"User ID from token: {userId}");
@@ -99,7 +92,7 @@ builder.Services.AddSingleton<MessageConsumer>(provider =>
         .Build();
     var rabbitMqConfiguration = configuration.GetSection("RabbitMqConfiguration").Get<RabbitMqConfiguration>();
     var rabbitMqConnectionService = new RabbitMqConnectionService(Options.Create(rabbitMqConfiguration));
-   
+
     var hubUrl = configuration.GetValue<string>("SignalRUrl");
     var hubContext = provider.GetRequiredService<IHubContext<NotificationHub>>();
     var logger = provider.GetRequiredService<ILogger<MessageConsumer>>();

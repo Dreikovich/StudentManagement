@@ -1,16 +1,12 @@
-using System.Text;
 using MessagePublisher.Services;
-using MessagePublisher.Configuration;
-using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace MessagePublisher;
 
 public class Worker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
     private readonly IModel _channel;
+    private readonly ILogger<Worker> _logger;
     private readonly RabbitMqPublisher _publisher;
 
     public Worker(RabbitMqConnectionService connectionService, RabbitMqPublisher publisher, ILogger<Worker> logger)
@@ -18,7 +14,6 @@ public class Worker : BackgroundService
         _logger = logger;
         _channel = connectionService.CreateModel();
         _publisher = publisher;
-
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

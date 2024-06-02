@@ -6,15 +6,15 @@ namespace StudentManagementWebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubjectController: ControllerBase
-{   
+public class SubjectController : ControllerBase
+{
     private readonly ISubjectRepository _subjectRepository;
-    
+
     public SubjectController(ISubjectRepository subjectRepository)
     {
         _subjectRepository = subjectRepository;
     }
-    
+
     [HttpGet]
     public IActionResult GetAllSubjects()
     {
@@ -30,14 +30,12 @@ public class SubjectController: ControllerBase
     }
 
     [HttpPost]
-    
     public IActionResult PostSubject(SubjectCreationDto subjectCreationDto)
     {
         try
         {
             _subjectRepository.CreateSubject(subjectCreationDto);
             return Ok();
-
         }
         catch (Exception e)
         {

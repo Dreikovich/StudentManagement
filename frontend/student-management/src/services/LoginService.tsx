@@ -8,6 +8,7 @@ export type {Login};
 
 type LoginResponse = {
     token: string;
+    role: string;
 }
 
 export type {LoginResponse};

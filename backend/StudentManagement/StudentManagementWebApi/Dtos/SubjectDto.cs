@@ -7,7 +7,6 @@ public class SubjectDto
     public int SubjectID { get; set; }
     public string SubjectName { get; set; }
     public List<TypeDto> SubjectComponents { get; set; }
-
 }
 
 public class TypeDto

@@ -9,19 +9,21 @@ namespace StudentManagementWebApi.Controllers;
 public class AttendanceController : ControllerBase
 {
     private readonly IAttendanceRepository _attendanceRepository;
-    
+
     public AttendanceController(IAttendanceRepository attendanceRepository)
     {
         _attendanceRepository = attendanceRepository;
     }
-    
+
     [HttpGet]
-    public IActionResult GetAllAttendances([FromQuery] string group_name, [FromQuery] string academic_year, string subject_name, string session_type)
+    public IActionResult GetAllAttendances([FromQuery] string group_name, [FromQuery] string academic_year,
+        string subject_name, string session_type)
     {
         try
         {
-            var attendances = _attendanceRepository.GetAllAttendances(group_name, academic_year, subject_name, session_type);
-            
+            var attendances =
+                _attendanceRepository.GetAllAttendances(group_name, academic_year, subject_name, session_type);
+
             return Ok(attendances);
         }
         catch (Exception ex)
@@ -29,7 +31,7 @@ public class AttendanceController : ControllerBase
             return StatusCode(500, $"Internal Server Error: {ex.Message}");
         }
     }
-    
+
     [HttpPost]
     public IActionResult AddAttendance([FromBody] AttendanceCreationDto attendanceDto)
     {
@@ -43,5 +45,4 @@ public class AttendanceController : ControllerBase
             return StatusCode(500, $"Internal Server Error: {ex.Message}");
         }
     }
-    
 }

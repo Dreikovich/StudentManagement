@@ -3,10 +3,10 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace StudentManagementWebApi.Attributes;
+
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
 public class SwaggerExcludeAttribute : Attribute
 {
-    
 }
 
 public class SwaggerExcludeFilter : ISchemaFilter
@@ -18,16 +18,9 @@ public class SwaggerExcludeFilter : ISchemaFilter
 
         foreach (var excludedProperty in excludeProperties)
         {
-            var propertyToRemove = schema.Properties.Keys.SingleOrDefault(x => x.ToLower() == excludedProperty.Name.ToLower());
-            if (propertyToRemove != null)
-            {
-                schema.Properties.Remove(propertyToRemove);
-            }
+            var propertyToRemove =
+                schema.Properties.Keys.SingleOrDefault(x => x.ToLower() == excludedProperty.Name.ToLower());
+            if (propertyToRemove != null) schema.Properties.Remove(propertyToRemove);
         }
     }
 }
-
-
-
-
-

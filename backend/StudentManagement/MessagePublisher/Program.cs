@@ -1,4 +1,3 @@
-
 using MessagePublisher;
 using MessagePublisher.Configuration;
 using MessagePublisher.Services;

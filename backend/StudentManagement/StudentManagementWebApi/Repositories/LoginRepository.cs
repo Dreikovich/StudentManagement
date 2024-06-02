@@ -1,4 +1,3 @@
-using System.Data;
 using StudentManagementWebApi.DataAccess;
 using StudentManagementWebApi.Dtos;
 
@@ -6,9 +5,9 @@ namespace StudentManagementWebApi.Repositories;
 
 public class LoginRepository : ILoginRepository
 {
-    private readonly DataHelper _dataHelper;
     private readonly DatabaseHelper _databaseHelper;
-    
+    private readonly DataHelper _dataHelper;
+
     public LoginRepository(IConfiguration configuration)
     {
         _dataHelper = new DataHelper();
@@ -19,10 +18,9 @@ public class LoginRepository : ILoginRepository
     {
         try
         {
-            string query =
+            var query =
                 $"INSERT INTO StudentLogins (StudentUUID, Login, HashedPassword) VALUES ('{loginDto.StudentUuid}', '{loginDto.Login}', '{HashPassword(loginDto.Password)}')";
             _databaseHelper.ExecuteNonQuery(query);
-
         }
         catch (Exception e)
         {
@@ -30,24 +28,16 @@ public class LoginRepository : ILoginRepository
             throw;
         }
     }
-    
+
     public bool ValidateLogin(LoginDto loginDto)
     {
         try
         {
-            string studentUuid = GetStudentUuid(loginDto.Login);
-            loginDto.StudentUuid = studentUuid;
-            if (studentUuid == null)
-            {
-                return false;
-            }
-            string query = $"SELECT HashedPassword FROM StudentLogins WHERE Login = '{loginDto.Login}' and StudentUUID = '{studentUuid}'";
-            DataTable dataTable =  _databaseHelper.ExecuteQuery(query);
-            if (dataTable.Rows.Count == 0)
-            {
-                return false;
-            }
-            string hashedPassword = dataTable.Rows[0]["HashedPassword"].ToString();
+            var query =
+                $"SELECT HashedPassword FROM StudentLogins WHERE Login = '{loginDto.Login}' and StudentUUID = '{loginDto.StudentUuid}'";
+            var dataTable = _databaseHelper.ExecuteQuery(query);
+            if (dataTable.Rows.Count == 0) return false;
+            var hashedPassword = dataTable.Rows[0]["HashedPassword"].ToString();
             return VerifyPassword(loginDto.Password, hashedPassword);
         }
         catch (Exception e)
@@ -61,7 +51,8 @@ public class LoginRepository : ILoginRepository
     {
         try
         {
-            string query = $"UPDATE StudentLogins Set BearerToken = '{token}', TokenExpirationDate='{expirationDate}' WHERE StudentUUID = '{studentUuid}'";
+            var query =
+                $"UPDATE StudentLogins Set BearerToken = '{token}', TokenExpirationDate='{expirationDate}' WHERE StudentUUID = '{studentUuid}'";
             _databaseHelper.ExecuteNonQuery(query);
         }
         catch (Exception e)
@@ -70,31 +61,36 @@ public class LoginRepository : ILoginRepository
             throw;
         }
     }
-    
-    private string GetStudentUuid(string login)
+
+    public string GetStudentUuid(string login)
     {
-        string query = $"SELECT StudentUUID FROM StudentLogins WHERE Login = '{login}'";
-        DataTable dataTable = _databaseHelper.ExecuteQuery(query);
-        if (dataTable.Rows.Count > 0)
-        {
-            return dataTable.Rows[0]["StudentUUID"].ToString();
-        }
+        //Todo is it good approach to use only login to get student uuid?
+        var query = $"SELECT StudentUUID FROM StudentLogins WHERE Login = '{login}'";
+        var dataTable = _databaseHelper.ExecuteQuery(query);
+        if (dataTable.Rows.Count > 0) return dataTable.Rows[0]["StudentUUID"].ToString();
         return null;
     }
 
     public bool IsTokenValid(string token)
     {
-        string query = $"SELECT Count(*) FROM StudentLogins WHERE BearerToken='{token}'";
-        DataTable dataTable = _databaseHelper.ExecuteQuery(query);
+        var query = $"SELECT Count(*) FROM StudentLogins WHERE BearerToken='{token}'";
+        var dataTable = _databaseHelper.ExecuteQuery(query);
         var count = int.Parse(dataTable.Rows[0][0].ToString());
         return count > 0;
     }
 
+    public string GetUserRole(LoginDto loginDto)
+    {
+        var query = $"SELECT Role FROM StudentLogins WHERE StudentUUID = '{loginDto.StudentUuid}'";
+        var dataTable = _databaseHelper.ExecuteQuery(query);
+        return dataTable.Rows[0]["Role"].ToString();
+    }
+
     private string HashPassword(string password)
     {
-         return BCrypt.Net.BCrypt.HashPassword(password);
+        return BCrypt.Net.BCrypt.HashPassword(password);
     }
-    
+
     private bool VerifyPassword(string password, string hash)
     {
         return BCrypt.Net.BCrypt.Verify(password, hash);

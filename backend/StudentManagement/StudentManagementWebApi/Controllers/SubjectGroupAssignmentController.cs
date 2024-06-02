@@ -23,10 +23,10 @@ public class SubjectGroupAssignmentController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult AddSubjectGroupAssignment([FromBody] SubjectGroupAssignmentCreateDto subjectGroupAssignmentCreateDto)
+    public IActionResult AddSubjectGroupAssignment(
+        [FromBody] SubjectGroupAssignmentCreateDto subjectGroupAssignmentCreateDto)
     {
         _subjectGroupAssignmentRepository.AddSubjectGroupAssignment(subjectGroupAssignmentCreateDto);
         return Ok();
     }
-    
 }

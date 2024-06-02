@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace StudentManagementWebApi.Dtos;
 
 public class SubjectGroupAssignmentDto

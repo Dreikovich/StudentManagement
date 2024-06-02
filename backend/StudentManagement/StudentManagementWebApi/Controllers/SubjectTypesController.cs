@@ -5,15 +5,15 @@ namespace StudentManagementWebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class SubjectTypesController:ControllerBase
+public class SubjectTypesController : ControllerBase
 {
     private readonly ISubjectTypesRepository _subjectTypesRepository;
-    
+
     public SubjectTypesController(ISubjectTypesRepository subjectTypesRepository)
     {
         _subjectTypesRepository = subjectTypesRepository;
     }
-    
+
     [HttpGet]
     public IActionResult GetSubjectTypes()
     {

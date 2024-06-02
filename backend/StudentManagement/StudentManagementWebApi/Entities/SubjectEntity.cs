@@ -10,5 +10,4 @@ public class SubjectEntity
     public int TypeID { get; set; }
     public string TypeName { get; set; }
     public int Hours { get; set; }
-    
 }

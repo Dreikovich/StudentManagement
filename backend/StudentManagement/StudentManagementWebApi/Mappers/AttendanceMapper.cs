@@ -1,19 +1,20 @@
 using StudentManagementWebApi.Dtos;
 using StudentManagementWebApi.Entities;
 
-
 namespace StudentManagementWebApi.Mappers;
 
 public class AttendanceMapper
 {
     private readonly IStudentMapper _studentMapper;
+
     public AttendanceMapper(IStudentMapper studentMapper)
     {
         _studentMapper = studentMapper;
     }
+
     public AttendanceDto MapAttendanceEntityToAttendanceDto(AttendanceEntity attendance)
     {
-        return new AttendanceDto()
+        return new AttendanceDto
         {
             AttendanceID = attendance.AttendanceID,
             StudentID = attendance.StudentID,
@@ -31,13 +32,12 @@ public class AttendanceMapper
             SubjectID = attendance.SubjectID,
             GroupID = attendance.GroupID,
             GroupName = attendance.GroupName
-            
         };
     }
-    
+
     public AttendanceEntity MapAttendanceDtoToAttendanceEntity(AttendanceCreationDto attendance)
     {
-        return new AttendanceEntity()
+        return new AttendanceEntity
         {
             StudentID = attendance.StudentID,
             TeacherID = attendance.TeacherID,

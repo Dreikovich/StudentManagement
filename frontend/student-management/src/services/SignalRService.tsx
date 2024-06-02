@@ -1,4 +1,4 @@
-import * as signalR from "@microsoft/signalr";
+ import * as signalR from "@microsoft/signalr";
 
 const hubUrl = "http://localhost:5012/notificationHub";
 const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MGNkZGVhYS0yNzNjLTRkMDUtYTI1Ny02MTZjYWVkNDk3NjgiLCJ1bmlxdWVfbmFtZSI6Imt1QGdtYWlsLmNvbSIsImp0aSI6IjdiY2FiMjMxLWE3NjQtNDUwMy1hNmQ1LTAyMzU1MzkwMTMwOSIsIm5hbWVpZCI6IjkwY2RkZWFhLTI3M2MtNGQwNS1hMjU3LTYxNmNhZWQ0OTc2OCIsIm5iZiI6MTcxNjc3MzI2OCwiZXhwIjoxNzE2ODU5NjY4LCJpYXQiOjE3MTY3NzMyNjh9.WGyvSob6HDgIDMDAVNRupQ7e5rkH5Al12b5fN-M6roc";

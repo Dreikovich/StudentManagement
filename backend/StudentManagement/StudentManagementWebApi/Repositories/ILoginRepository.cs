@@ -5,10 +5,14 @@ namespace StudentManagementWebApi.Repositories;
 public interface ILoginRepository
 {
     void AddLogin(LoginDto loginDto);
-    
+
     bool ValidateLogin(LoginDto loginDto);
-    
-    void SaveTokenToDatabase(string token, DateTime expirationDate, string studentUuid);
-    
+
+    string GetStudentUuid(string login);
+
+    void SaveTokenToDatabase(string token, DateTime expirationDate, string userUuid);
+
     bool IsTokenValid(string token);
+
+    string GetUserRole(LoginDto loginDto);
 }

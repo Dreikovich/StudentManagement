@@ -8,9 +8,7 @@ public class SubjectCreationDto
 
 public class SubjectComponentDto
 {
-
     public int TypeID { get; set; }
     public int Hours { get; set; }
-    public int TeacherID  { get; set; }
-
+    public int TeacherID { get; set; }
 }

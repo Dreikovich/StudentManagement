@@ -6,15 +6,15 @@ namespace StudentManagementWebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StudentGroupAssignmentController:ControllerBase
+public class StudentGroupAssignmentController : ControllerBase
 {
     private readonly IStudentGroupAssignmentRepository _studentGroupAssignmentRepository;
-    
+
     public StudentGroupAssignmentController(IStudentGroupAssignmentRepository studentGroupAssignmentRepository)
     {
         _studentGroupAssignmentRepository = studentGroupAssignmentRepository;
     }
-    
+
     [HttpPost]
     public IActionResult AddStudentGroupAssignment(StudentGroupAssignmentDto studentGroupAssignmentDto)
     {
@@ -28,5 +28,4 @@ public class StudentGroupAssignmentController:ControllerBase
             return StatusCode(500, $"Internal Server Error: {ex.Message}");
         }
     }
-    
 }

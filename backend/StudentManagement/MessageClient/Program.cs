@@ -14,7 +14,7 @@ public class Program
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", false, true)
             .Build();
 
         var services = new ServiceCollection();
@@ -27,7 +27,7 @@ public class Program
             var hubContext = provided.GetRequiredService<IHubContext<Hub>>();
             var logger = provided.GetRequiredService<ILogger<MessageConsumer>>();
             var cache = provided.GetRequiredService<IDistributedCache>();
-            
+
             return new MessageConsumer(rabbitMqConnectionService, hubUrl, hubContext, logger, cache);
         });
         var serviceProvider = services.BuildServiceProvider();
@@ -39,18 +39,18 @@ public class Program
             Console.WriteLine("RabbitMqConnectionService is null");
             return;
         }
-        
+
         var messageConsumer = serviceProvider.GetRequiredService<MessageConsumer>();
-        
+
         // messageConsumer.StartConsuming();
-        
+
         Console.CancelKeyPress += (sender, e) =>
         {
             Console.WriteLine("Stopping consumer...");
             messageConsumer.StopConsuming();
             e.Cancel = true;
         };
-        
+
         Thread.Sleep(Timeout.Infinite);
     }
 }
